@@ -38,7 +38,7 @@ export default function Login() {
             })
             .catch(error => {
                 if (error.response.status === 401) {
-                    alert("등록되지 않은 ID거나 잘못된 Password 입니다.")
+                    alert("등록되지 않은 ID거나 잘못된 비밀번호 입니다.")
                     setUserpw("");
                 }
                 else {
