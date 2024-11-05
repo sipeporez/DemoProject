@@ -2,7 +2,9 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { LoginState } from '../Recoil/LoginStateAtom';
+import { useRecoilState } from 'recoil';
 
 export default function Login() {
     const url = process.env.REACT_APP_SPRING_SERVER + "login"
@@ -11,6 +13,7 @@ export default function Login() {
     const [userpw, setUserpw] = useState('');
     const [remeberid, setRememberID] = useState(false);
     const navigate = useNavigate();
+    const [loginCheck, setLoginCheck] = useRecoilState(LoginState);
 
     const userdata = {
         "userid": userid,
@@ -21,31 +24,34 @@ export default function Login() {
         setUserid(localStorage.getItem("userid"));
     },[])
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+        const handleSubmit = async (e) => {
+            e.preventDefault();
 
-        if (remeberid) {
-            localStorage.setItem("userid",userid)
+            if (remeberid) {
+                localStorage.setItem("userid",userid)
+            }
+
+            await axios.post(url, userdata)
+                .then(response => {
+                    if (response.status === 200) {
+                        sessionStorage.setItem("token", response.headers.getAuthorization())
+                        setLoginCheck(true);
+                        navigate("/home")
+                    }
+
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status === 401) {
+                            alert("등록되지 않은 ID거나 잘못된 비밀번호 입니다.")
+                            setUserpw("");
+                        }
+                    }
+                    else {
+                        alert("로그인 서버가 응답하지 않습니다.")
+                    }
+                })
         }
-
-        axios.post(url, userdata)
-            .then(response => {
-                if (response.status === 200) {
-                    sessionStorage.setItem("token", response.headers.getAuthorization())
-                    navigate("/home")
-                }
-
-            })
-            .catch(error => {
-                if (error.response.status === 401) {
-                    alert("등록되지 않은 ID거나 잘못된 비밀번호 입니다.")
-                    setUserpw("");
-                }
-                else {
-                    alert("로그인에 실패했습니다.")
-                }
-            })
-    }
 
     return (
         <div className='flex justify-center items-center w-full bg-body-tertiary'>
