@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor
-public class LengthException extends Exception {
+public class LengthException extends RuntimeException {
     private String propertyName; // 어떤 프로퍼티인지 저장할 필드
 
     public LengthException(String propertyName) {

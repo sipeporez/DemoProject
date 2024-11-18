@@ -93,7 +93,7 @@ public class BoardSerivce {
         MemberDAO mem = memVal.findMemberIDFromToken();
         // 게시글 작성자와 삭제자가 일치하는지 검증
         if (memVal.checkMemberAuthorization(mem, dao.getMember().getUserid())) {
-            br.delete(dao);
+            br.removeBoard(idx);
         } else throw new MemberMismatchException("게시글 작성자만 삭제할 수 있습니다.");
     }
 

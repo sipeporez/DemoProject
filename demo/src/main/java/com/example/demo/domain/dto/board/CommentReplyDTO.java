@@ -12,7 +12,10 @@ import java.time.LocalDateTime;
 public class CommentReplyDTO {
     private String commentId;
     private Integer idx;
+    private Integer boardIdx;
     private String nickname;
     private String content;
     private LocalDateTime writtenDate;
+    private Boolean edited;
+    private Boolean deleted;
 }

@@ -17,5 +17,6 @@ public class BoardDTO {
     private String content;
     private LocalDateTime writtenDate;
     private Long likeCnt;
+    private Boolean edited;
 
 }

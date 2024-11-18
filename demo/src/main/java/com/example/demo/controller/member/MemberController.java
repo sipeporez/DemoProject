@@ -1,6 +1,7 @@
 package com.example.demo.controller.member;
 
 import com.example.demo.domain.dao.member.MemberDAO;
+import com.example.demo.domain.dto.EmailDTO;
 import com.example.demo.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +15,59 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService ms;
 
+    // 테스트용 랜덤 멤버 생성
     @GetMapping("/member")
     public ResponseEntity<?> getMember() {
         ms.saveRandomMember();
         return ResponseEntity.ok("세이브됨");
     }
 
+    // 회원가입
     @PostMapping("/join")
     public ResponseEntity<?> saveMember(@RequestBody MemberDAO mem) {
         ms.saveMember(mem);
-        return ResponseEntity.ok("회원가입 됨");
+        return ResponseEntity.ok("");
+    }
+
+    // 아이디 중복체크
+    @PostMapping("/checkid")
+    public ResponseEntity<?> checkUserID(@RequestBody MemberDAO mem) {
+        ms.checkUserID(mem);
+        return ResponseEntity.ok("");
+    }
+
+    // 닉네임 중복체크
+    @PostMapping("/checknick")
+    public ResponseEntity<?> checkNickname(@RequestBody MemberDAO mem) {
+        ms.checkNickname(mem);
+        return ResponseEntity.ok("");
+    }
+
+    // 권한 체크
+    @GetMapping("/role")
+    public ResponseEntity<?> getRole() {
+        return ResponseEntity.ok(ms.getRole());
+    }
+
+    // 인증 여부 체크
+    @GetMapping("/checkauth")
+    public ResponseEntity<?> checkAuth() {
+        ms.checkAuth();
+        return ResponseEntity.ok("");
+    }
+
+    // 이메일 인증 - 토큰 발급
+    @PostMapping("/verifyemail")
+    public ResponseEntity<?> verifyEmail(@RequestBody MemberDAO dao) {
+        ms.createMailToken(dao);
+        return ResponseEntity.ok("");
+    }
+
+    // 이메일 인증 - 토큰 검증
+    @PostMapping("/verifykey")
+    public ResponseEntity<?> verifyKey(@RequestBody EmailDTO dto) {
+        ms.verifyMailToken(dto);
+        return ResponseEntity.ok("");
     }
 
 }

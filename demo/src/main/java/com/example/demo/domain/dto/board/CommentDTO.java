@@ -16,4 +16,6 @@ public class CommentDTO {
     private String nickname;
     private String content;
     private LocalDateTime writtenDate;
+    private Boolean edited;
+    private Boolean deleted;
 }

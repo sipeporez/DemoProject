@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor
-public class WrongInputException extends Exception {
+public class WrongInputException extends RuntimeException {
   private String propertyName; // 어떤 프로퍼티인지 저장할 필드
 
   public WrongInputException(String propertyName) {

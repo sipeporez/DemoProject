@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ToDoRepository extends JpaRepository<ToDoDAO, Integer> {
+public interface ToDoRepository extends JpaRepository<ToDoDAO, Long> {
 
     @Query("SELECT new com.example.demo.domain.dto.todo.ToDoDTO " +
             "(t.idx, t.member.userid, t.content, t.createdDate, t.completed) "

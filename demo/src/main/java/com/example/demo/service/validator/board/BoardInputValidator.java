@@ -21,21 +21,22 @@ public class BoardInputValidator {
     }
 
     // 게시글 검증
-    public void boardInputValidator(WriteBoardDTO dto) throws WrongInputException {
+    public void boardInputValidator(WriteBoardDTO dto) {
         checkInput(dto.getTitle(), MAX_LENGTH_TITLE, "Title");
         checkInput(dto.getContent(), MAX_LENGTH_CONTENT, "Content");
     }
 
     // 댓글 검증
-    public void commentInputValidator(WriteCommentDTO dto) throws WrongInputException {
+    public void commentInputValidator(WriteCommentDTO dto) {
         checkInput(dto.getContent(), MAX_LENGTH_CONTENT_C, "Content");
     }
 
     // 대댓글 검증
-    public void replyInputValidator(WriteCommentDTO dto) throws WrongInputException {
+    public void replyInputValidator(WriteCommentDTO dto) {
         try {
             if (dto.getCommentId().length() != 36) throw new IllegalArgumentException();
             UUID uuid = UUID.fromString(dto.getCommentId());
+            checkInput(dto.getContent(), MAX_LENGTH_CONTENT_C, "Content");
         } catch (IllegalArgumentException e) {
             throw new WrongInputException("Comment ID");
         }

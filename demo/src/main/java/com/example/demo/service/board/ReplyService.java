@@ -1,11 +1,14 @@
 package com.example.demo.service.board;
 
+import com.example.demo.domain.dao.board.BoardDAO;
 import com.example.demo.domain.dao.board.CommentReplyDAO;
 import com.example.demo.domain.dao.member.MemberDAO;
 import com.example.demo.domain.dto.board.CommentReplyDTO;
 import com.example.demo.domain.dto.board.WriteCommentDTO;
+import com.example.demo.exception.BoardNotFoundException;
 import com.example.demo.exception.CommentNotFoundException;
 import com.example.demo.exception.MemberMismatchException;
+import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.ReplyRepository;
 import com.example.demo.service.validator.board.BoardInputValidator;
 import com.example.demo.service.validator.member.MemberValidator;
@@ -20,6 +23,7 @@ import java.util.List;
 public class ReplyService {
     private final MemberValidator memVal;
     private final ReplyRepository rr;
+    private final BoardRepository br;
     private final BoardInputValidator boardVal;
 
     // 대댓글 조회 리스트 메서드
@@ -37,6 +41,8 @@ public class ReplyService {
         if (rr.checkComment(dto.getCommentId()) == 1) {
             rr.save(CommentReplyDAO.builder()
                     .member(mem)
+                    .board(br.findById(dto.getBoardIdx())
+                            .orElseThrow(() -> new BoardNotFoundException("게시글을 찾을 수 없습니다.")))
                     .commentId(dto.getCommentId())
                     .content(dto.getContent())
                     .build());
@@ -56,6 +62,7 @@ public class ReplyService {
         // 대댓글 작성자와 수정자가 일치하는지 검증
         if (memVal.checkMemberAuthorization(mem,dao.getMember().getUserid())) {
             dao.setContent(dto.getContent());
+            dao.setEdited(true);
             rr.save(dao);
         } else throw new MemberMismatchException("댓글 작성자만 수정할 수 있습니다.");
     }
@@ -70,7 +77,7 @@ public class ReplyService {
         MemberDAO mem = memVal.findMemberIDFromToken();
         // 대댓글 작성자와 삭제자가 일치하는지 검증
         if (memVal.checkMemberAuthorization(mem,dao.getMember().getUserid())) {
-            rr.deleteReply(idx);
+            rr.removeReply(idx, mem.getRole().toString());
         } else throw new MemberMismatchException("댓글 작성자만 삭제할 수 있습니다.");
     }
 }

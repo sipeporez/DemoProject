@@ -13,7 +13,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Member", indexes = {
-        @Index(name = "idx_board_nickname", columnList = "nickname")
+        @Index(columnList = "nickname"),
+        @Index(columnList = "email")
 })
 public class MemberDAO {
     @Id
@@ -25,6 +26,9 @@ public class MemberDAO {
     private String name;
     @Column(length = 16, unique = true, nullable = false)
     private String nickname;
+
+    @Column(length = 64, unique = true, nullable = true)
+    private String email;
 
     @Column(nullable = false)
     @Builder.Default
