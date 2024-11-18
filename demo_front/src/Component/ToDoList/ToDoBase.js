@@ -1,19 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import CustomButton from '../UI/CustomButton';
-import ToDoComponent from './ToDoComponent';
-import { CustomAxios } from '../CustomAxios';
-import NavBar from '../UI/NavBar';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CustomAxios } from '../CustomAxios';
+import ToDoComponent from './ToDoComponent';
+import useLoginCheck from '../Hooks/useLoginCheck';
+import CheckEnabled from '../Util/CheckEnabled';
 
 const ToDoBase = () => {
     // todo 리스트 배열에 대한 상태
     const [todos, setTodos] = useState([]);
-    // DB에서 가져온 데이터
-    const [getData, setGetData] = useState([]);
     // 새 할 일 등록시 필요한 input Ref
     const inputData = useRef();
-    const navigate = useNavigate();
 
+    useLoginCheck();
     // 체크 핸들러
     const checkHandler = async (toDoIdx) => {
         const selected = todos.map(item => item.idx === toDoIdx ?
@@ -40,9 +38,9 @@ const ToDoBase = () => {
         let newContent = prompt("수정할 내용 입력", selected.content);
         if (newContent !== null && newContent !== selected.content) {
             selected.content = newContent;
-        } 
+        }
         else return;
-        
+
         try {
             await CustomAxios({
                 methodType: "PUT",
@@ -76,8 +74,13 @@ const ToDoBase = () => {
 
     // 페이지 최초 로드 시 DB에서 데이터 가져오기
     useEffect(() => {
-        getToDoData()
-    },[])
+        const fetchData = async () => {
+            if (await CheckEnabled()) {
+                getToDoData();
+            }
+        }
+        fetchData();
+    }, [])
 
     // DB 저장된 데이터 가져오기
     const getToDoData = async () => {
@@ -90,64 +93,67 @@ const ToDoBase = () => {
                 }
             })
         } catch (error) {
-            alert(error.response.data)
-            if (error.response.status === 401) navigate("/")
+            if (error.response.status === 401) {
+                alert(error.response.data)
+                window.location.href = "/home"
+            }
             return;
         }
     }
 
     // 새 ToDo 추가
-    const addNewToDo = async () => {
-        if (todos.length > 9) {
-            alert("최대 10개까지 추가 가능합니다.")
-            return;
-        }
-        if (inputData.current.value.trim() === "") {
-            alert("할 일을 입력해주세요.")
-            return;
-        }
-        const newToDo = {
-            content: inputData.current.value
-        };
-        try {
-            await CustomAxios({
-                methodType: "POST",
-                backendURL: "todo/post",
-                fetchData: newToDo,
-                onResponse: (resp) => {
-                    const newToDoWithIdx = { ...newToDo, idx: resp };
-                    setTodos(prevTodos => [...prevTodos, newToDoWithIdx])
-                }
-            })
-        } catch (error) {
-            alert(error.response.data)
-            return;
+    const addNewToDo = async (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (todos.length > 9) {
+                alert("최대 10개까지 추가 가능합니다.")
+                return;
+            }
+            if (inputData.current.value.trim() === "") {
+                alert("할 일을 입력해주세요.")
+                return;
+            }
+            const newToDo = {
+                content: inputData.current.value
+            };
+            try {
+                await CustomAxios({
+                    methodType: "POST",
+                    backendURL: "todo/post",
+                    fetchData: newToDo,
+                    onResponse: (resp) => {
+                        const newToDoWithIdx = { ...newToDo, idx: resp };
+                        setTodos(prevTodos => [...prevTodos, newToDoWithIdx])
+                        inputData.current.value = null
+                    }
+                })
+            } catch (error) {
+                alert(error.response.data)
+                return;
+            }
         }
     }
 
     return (
-        <>
-            <header>
-                <NavBar />
-            </header>
-            <div className='flex flex-col justify-start items-center w-screen min-h-screen'>
-                <div className='flex w-1/3 my-4 gap-2 justify-center items-center'>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
-                    <textarea
-                        ref={inputData}
-                        rows="2"
-                        maxLength={100}
-                        className="block resize-none p-2.5 w-4/5 text-sm
-                        text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="새 할 일"
-                        defaultValue={"새 할 일"}></textarea>
-                    <CustomButton onClick={addNewToDo} label={'추가'} />
-                </div>
-                <div className='flex justify-center items-start bg-gray-200 w-1/2 h-full'>
-                    <div className='flex-col flex-1 justify-center items-center'>
-                        {todos.map(todo => (
+        <div className='flex flex-col justify-start items-center'>
+            <div className='flex flex-col my-4 justify-center items-center w-full md:w-2/3 ml-0 lg:ml-32 xl:ml-48'>
+                <label className="block m-4 text-2xl font-bold text-gray-200 dark:text-white">To-Do List</label>
+                <textarea
+                    ref={inputData}
+                    rows="2"
+                    maxLength={100}
+                    className="resize-none p-2.5 w-11/12 md:w-3/4 text-sm
+                        text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="새 할 일을 입력 해주세요.&#13;&#10;Shift+Enter 입력시 줄바꿈, Enter 입력시 등록"
+                    onKeyDown={(e) => { addNewToDo(e) }}
+                    form='todoInput'>
+                </textarea>
+            </div>
+            <div className='flex justify-center items-start bg-gray-200 w-full ml-0 lg:ml-32 xl:ml-48 min-[900px]:w-2/3 h-full mb-5'>
+                <div className='flex-col flex-1 justify-center items-center'>
+                    {todos.map(todo => (
+                        <div className='my-2.5' key={todo.idx}>
                             <ToDoComponent
-                                key={todo.idx}
                                 toDoIdx={todo.idx}
                                 inputData={todo.content}
                                 checked={todo.completed}
@@ -155,11 +161,11 @@ const ToDoBase = () => {
                                 editHandler={editHandler}
                                 deleteHandler={deleteHandler}
                             />
-                        ))}
-                    </div>
+                        </div>
+                    ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

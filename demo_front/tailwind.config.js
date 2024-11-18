@@ -2,8 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
+    fontFamily:{
+      Nanum: ["Nanum Gothic"]
+    },
     extend: {},
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 }
 
