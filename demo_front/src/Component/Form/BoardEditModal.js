@@ -3,15 +3,12 @@ import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 import React, { useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { LoginState } from '../../Recoil/LoginStateAtom';
 import { CustomAxios } from '../CustomAxios';
 import CustomButton from '../UI/CustomButton';
+import { useRecoilValue } from 'recoil';
+import { LoginState } from '../../Recoil/LoginStateAtom';
 
-const BoardWriteModal = () => {
-
-    const checkLogin = useRecoilValue(LoginState)
-
+const BoardEditModal = ({ boardIdx, title, content }) => {
     const style = {
         position: 'absolute',
         top: '50%',
@@ -27,7 +24,10 @@ const BoardWriteModal = () => {
         },
     };
 
+    const checkLogin = useRecoilValue(LoginState);
+
     const [open, setOpen] = useState(false);
+
     const handleOpen = () => {
         if (checkLogin) {
             setOpen(true);
@@ -41,13 +41,13 @@ const BoardWriteModal = () => {
     const inputTitle = useRef('');
     const inputContent = useRef('');
 
-    const handleWrite = async () => {
+    const handleEdit = async () => {
         if (inputTitle.current.value.trim() !== "" &&
             inputContent.current.value.trim() !== "") {
             try {
                 await CustomAxios({
-                    methodType: "POST",
-                    backendURL: "board/write",
+                    methodType: "PUT",
+                    backendURL: `board/edit/${boardIdx}`,
                     fetchData: {
                         title: inputTitle.current.value,
                         content: inputContent.current.value
@@ -70,7 +70,7 @@ const BoardWriteModal = () => {
     }
     return (
         <div>
-            <CustomButton label={"게시글 등록"} onClick={handleOpen} ></CustomButton>
+            <CustomButton label={"수정"} onClick={handleOpen} />
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -88,7 +88,7 @@ const BoardWriteModal = () => {
                 <Fade in={open}>
                     <Box sx={style}>
                         <div className='text-xl font-bold'>
-                            게시글 등록
+                            게시글 수정
                         </div>
                         <form className="max-w-full flex-col">
                             <div className="relative z-0 w-full mt-4 mb-3 group">
@@ -97,6 +97,7 @@ const BoardWriteModal = () => {
                                     rows="1"
                                     className="block resize-none p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="글 제목"
+                                    defaultValue={title}
                                     maxLength={100}></textarea>
                             </div>
                             <div className="relative z-0 w-full mb-3 group">
@@ -105,10 +106,11 @@ const BoardWriteModal = () => {
                                     rows="10"
                                     className="block resize-y min-h-20 max-h-[70vh] p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="글 내용"
+                                    defaultValue={content}
                                     maxLength={5000}></textarea>
                             </div>
                             <div className='float-right'>
-                                <CustomButton label={"글 등록"} onClick={handleWrite} />
+                                <CustomButton label={"글 수정"} onClick={handleEdit} />
                             </div>
                         </form>
                     </Box>
@@ -117,4 +119,4 @@ const BoardWriteModal = () => {
         </div>
     )
 }
-export default BoardWriteModal
+export default BoardEditModal

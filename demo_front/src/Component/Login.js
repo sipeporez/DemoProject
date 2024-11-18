@@ -1,67 +1,100 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { LoginState } from '../Recoil/LoginStateAtom';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { LoginState } from '../Recoil/LoginStateAtom';
+import { CustomAxios } from './CustomAxios';
+import CheckAdmin from './Util/CheckAdmin';
+import CloudFlareTurnstile from './Util/CloudFlareTurnstile';
+import Spinner from './UI/Spinner';
 
 export default function Login() {
-    const url = process.env.REACT_APP_SPRING_SERVER + "login"
-
     const [userid, setUserid] = useState('');
     const [userpw, setUserpw] = useState('');
     const [remeberid, setRememberID] = useState(false);
-    const navigate = useNavigate();
-    const [loginCheck, setLoginCheck] = useRecoilState(LoginState);
+    const [loginState, setLoginState] = useRecoilState(LoginState);
+    const [token, setToken] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const userdata = {
         "userid": userid,
         "userpw": userpw
     }
-
-    useEffect(() =>{
+    // 저장된 아이디 불러오기
+    useEffect(() => {
         setUserid(localStorage.getItem("userid"));
-    },[])
+    }, [])
 
-        const handleSubmit = async (e) => {
-            e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
 
-            if (remeberid) {
-                localStorage.setItem("userid",userid)
-            }
+        if (remeberid) {
+            localStorage.setItem("userid", userid);
+        }
+        
+        if (!userid || !userpw) {
+            setLoading(false);
+            alert("아이디와 비밀번호를 모두 입력해주세요.");
+            return;
+        }
 
-            await axios.post(url, userdata)
-                .then(response => {
-                    if (response.status === 200) {
-                        sessionStorage.setItem("token", response.headers.getAuthorization())
-                        setLoginCheck(true);
-                        navigate("/home")
-                    }
+        if (!token) {
+            setLoading(false);
+            alert('Turnstile 인증을 완료해주세요.');
+            return;
+        }
 
-                })
-                .catch(error => {
-                    if (error.response) {
-                        if (error.response.status === 401) {
-                            alert("등록되지 않은 ID거나 잘못된 비밀번호 입니다.")
-                            setUserpw("");
+        // 서버에 인증 토큰을 보내는 로직
+        try {
+            await CustomAxios({
+                methodType: "POST",
+                backendURL: "turnstile",
+                fetchData: JSON.stringify({ token }),
+                onResponse: async (resp) => {
+                    if (resp) {
+                        try {
+                            await CustomAxios({
+                                methodType: "POST",
+                                backendURL: "login",
+                                fetchData: userdata,
+                                onResponse: async (resp, header) => {
+                                    sessionStorage.setItem("token", header.authorization);
+                                    sessionStorage.setItem("user", resp);
+                                    setLoginState(true);
+                                    await CheckAdmin();
+                                    window.location.href = "/home";
+                                }
+                            })
+                        } catch (error) {
+                            if (error.status === 401) {
+                                setLoading(false);
+                                alert("등록되지 않은 ID거나 잘못된 비밀번호 입니다.");
+                                setUserpw("");
+                            }
+                            else {
+                                setLoading(false);
+                                alert("로그인 서버가 응답하지 않습니다.");
+                            }
                         }
                     }
-                    else {
-                        alert("로그인 서버가 응답하지 않습니다.")
-                    }
-                })
+                }
+            });
+        } catch (error) {
+            alert(error.response.data);
+            return;
         }
+
+    }
 
     return (
         <div className='flex justify-center items-center w-full bg-body-tertiary'>
-            <div className="d-flex align-items-center py-4 " style={{ minHeight: '100vh' }}>
-                <main className="form-signin w-100 m-auto">
+            <div className="flex align-items-center py-4 ml-0 lg:ml-32 xl:ml-48 min-h-[calc(100vh-64px)]">
+                {loading ? <Spinner width={8} height={8} border={4} /> : <main className="form-signin w-100 m-auto">
                     <form onSubmit={handleSubmit}>
-                        <h1 className="h3 mb-3 fw-normal">LOGIN</h1>
-
+                        <div className="h3 mb-3">LOGIN</div>
                         <div className="form-floating my-2">
-                            <input type="text" className="form-control" id="userid" placeholder="User ID"
+                            <input type="text" className="form-control" id="userid" placeholder="ID"
+                                maxLength={16}
                                 value={userid || ''}
                                 onChange={(e) => setUserid(e.target.value)} />
                             <label htmlFor="userid">ID</label>
@@ -69,6 +102,7 @@ export default function Login() {
                         <div className="form-floating">
                             <input type="password" className="form-control" id="userpw" placeholder="Password"
                                 value={userpw || ''}
+                                maxLength={64}
                                 onChange={(e) => setUserpw(e.target.value)} />
                             <label htmlFor="userpw">Password</label>
                         </div>
@@ -80,11 +114,12 @@ export default function Login() {
                                 ID 기억하기
                             </label>
                         </div>
+                        <CloudFlareTurnstile setToken={setToken} />
                         <button className="btn btn-primary w-100 py-2 mt-2" type="submit">로그인</button>
                     </form>
-                    <button className="btn btn-success w-100 py-2 mt-2" type="button" onClick={() => { }}>회원가입</button>
+                    <button className="btn btn-success w-100 py-2 mt-2" type="button" onClick={() => { window.location.href = "/join" }}>회원가입</button>
                     <p className="mt-5 mb-3 text-body-secondary">&copy; 2024 Seong</p>
-                </main>
+                </main>}
             </div>
         </div>
     )

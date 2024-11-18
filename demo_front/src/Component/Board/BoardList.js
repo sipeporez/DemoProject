@@ -1,135 +1,106 @@
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
 import React, { useEffect, useState } from 'react';
 import { CustomAxios } from '../CustomAxios';
 import BoardWriteModal from '../Form/BoardWriteModal';
 import BoardView from './BoardView';
-import NavBar from '../UI/NavBar';
-
-const columns = [
-    { id: 'title', label: '제목', minWidth: 170 },
-    { id: 'nickname', label: '닉네임', minWidth: 170, align: 'center' },
-    { id: 'writtenDate', label: '작성일', minWidth: 170, align: 'center' },
-    { id: 'likeCnt', label: '좋아요', minWidth: 100, align: 'center' },
-];
+import TimeCalc from '../Util/TimeCalc';
+import Paging from '../UI/Paging';
+import { useRecoilValue } from 'recoil';
+import { LoginState } from '../../Recoil/LoginStateAtom';
 
 const BoardList = () => {
     const [data, setData] = useState([]);
-    const [page, setPage] = useState({ number: 0, size: 5, totalElements: 0 });
-    const [currentPage, setCurrentPage] = useState(page.number);
+    const [page, setPage] = useState({
+        number: 0,  // 초기 페이지 번호
+        size: 10,   // 한 페이지에 표시할 항목 수
+        totalElements: 0,  // 전체 항목 수
+    });
+
+    const checkLogin = useRecoilValue(LoginState);
+
+
     const [boardIdx, setBoardIdx] = useState('');
 
+    // 페이지 최초 로딩 시 게시글 데이터 가져오기
     useEffect(() => {
-        fetchData(currentPage, page.size);
-    }, [currentPage, page.size]); // Fetch data on page or size change
+        fetchData(page.number, page.size);
+    }, [page.number, page.size]);
 
-    const fetchData = (currentPage, pageSize) => {
-        CustomAxios({
-            methodType: 'get',
-            backendURL: `board/list?page=${currentPage}&size=${pageSize}`,
-            onResponse: handleResponse,
-        });
+    // fetch 함수
+    const fetchData = async (number, size) => {
+        try {
+            await CustomAxios({
+                methodType: 'get',
+                backendURL: `board/list?page=${number}&size=${size}`,
+                onResponse: (resp) => {
+                    setData(resp.content);
+                    setPage({ ...resp.page });
+                }
+            });
+        }catch (error) {
+            alert (error.response.data);
+            window.location.href = "/login";
+            return;
+        }
     };
 
-    const handleResponse = (response) => {
-        setData(response.content);
-        setPage({
-            ...page,
-            totalElements: response.page.totalElements, // Update total elements
-            number: response.page.number
-        });
-        setCurrentPage(response.page.number); // Ensure current page reflects response
+    // 페이지네이션
+    // 백앤드 pageNumber는 0부터 시작하므로 -1
+    const handlePageChange = (pageNumber) => {
+        fetchData(pageNumber - 1, page.size);
     };
 
-    const handleChangePage = (event, newPage) => {
-        setCurrentPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        const newSize = +event.target.value;
-        setPage({ ...page, size: newSize, number: 0 }); // Reset to first page
-        setCurrentPage(0); // Reset current page
-    };
-
+    // 게시글 클릭시 게시글 번호 저장 및 스크롤
     const handleBoardIdx = (idx) => {
         setBoardIdx(idx)
         window.scrollTo(0, 0)
     }
 
     return (
-        <>
-            <header>
-                <NavBar />
-            </header>
+        <div className='ml-0 lg:ml-32 xl:ml-48'>
             {boardIdx &&
                 <BoardView boardIdx={boardIdx} />}
-            <div className="flex justify-center w-full h-screen">
-                <div className="w-1/2 max-w-screen-xl justify-center items-center">
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                        <TableContainer>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        {columns.map((column) => (
-                                            <TableCell
-                                                key={column.id}
-                                                align="center"
-                                                size="small"
-                                                style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
-                                            >
-                                                {column.label}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {data.map((row) => (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.idx}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell
-                                                        key={column.id}
-                                                        align={column.align}
-                                                        onClick={() => handleBoardIdx(row.idx)}
-                                                        style={{ cursor: 'pointer' }}
-                                                    >
-                                                        {column.id === 'title'
-                                                            ? (value.length > 25 ? value.slice(0, 25) + '...' : value)
-                                                            : column.id === 'writtenDate'
-                                                                ? new Date(value).toLocaleString()
-                                                                : value
-                                                        }
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component="div"
-                            count={page.totalElements} // Use total elements for count
-                            rowsPerPage={page.size}
-                            page={currentPage}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                    <div className='float-right mt-2'>
-                        <BoardWriteModal />
+            <div className="flex justify-center pt-5">
+                <div className=" w-full md:w-2/3 max-w-screen-xl justify-center h-fit items-center">
+                    <table className='bg-white rounded-t-lg shadow-md flex-1 w-full'>
+                        <thead>
+                            <tr className='text-center text-md border-b-gray-500 border-b-2'>
+                                <th className='w-fit md:w-[50%] py-2'>제목</th>
+                                <th className='w-fit md:w-[30%] '>닉네임</th>
+                                <th className='w-fit md:w-[10%] '>작성일</th>
+                                <th className='w-fit md:w-[10%] '>좋아요</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data && data.map((item) => (
+                                <tr
+                                    key={item.idx}
+                                    onClick={() => handleBoardIdx(item.idx)}
+                                    className='hover:bg-opacity-10 hover:bg-black duration-150 border-b-2 transition-colors break-all text-sm md:text-md'>
+                                    <td className='text-start w-[30%] md:w-[50%] py-2 pl-2'>{item.title.length > 25 ? item.title.slice(0, 25) + '...' : item.title}</td>
+                                    <td className='text-center w-fit md:w-[30%] py-2'>{item.nickname.length > 10 ? item.nickname.slice(0, 10) + '...' : item.nickname}</td>
+                                    <td className='text-center w-fit md:w-[10%] py-2'>{<TimeCalc time={item.writtenDate} />}</td>
+                                    <td className='text-center w-fit md:w-[10%] py-2'>{item.likeCnt}</td>
+                                </tr>
+                            ))
+                            }
+                        </tbody>
+                    </table>
+                    <div className='flex justify-center rounded-b-lg items-center bg-white'>
+                        {page &&
+                            <Paging
+                                activePage={page.number + 1}
+                                itemsCountPerPage={page.size}
+                                totalItemsCount={page.totalElements}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageChange} />
+                        }
                     </div>
+                    {checkLogin ? <div className='float-right mt-2'>
+                        <BoardWriteModal />
+                    </div> : null}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

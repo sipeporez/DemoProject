@@ -1,25 +1,42 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import Login from './Component/Login';
-import Home from './Component/Home';
-import Register from './Component/Register';
-import BoardView from './Component/Board/BoardView';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import './App.css';
+import BoardView from './Component/Board/BoardView';
+import Home from './Component/Home';
+import Login from './Component/Login';
+import Register from './Component/Register';
+import Sentiment from './Component/Sentiment/Sentiment';
 import ToDoBase from './Component/ToDoList/ToDoBase';
+import BackGroundColor from './Component/UI/BackGroundColor';
+import NavBar from './Component/UI/NavBar';
+import SideBar from './Component/UI/SideBar';
+import VerifyEmail from './Component/Util/VerifyEmail';
 
 function App() {
   return (
+    <>
+    <BackGroundColor component={
       <RecoilRoot>
+      <NavBar />
+      <main>
+        <SideBar />
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/join" element={<Register />} />
-            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path='/verify' element={<VerifyEmail/>}/>
             <Route path="/home" element={<Home />} />
             <Route path="/view" element={<BoardView />} />
-            <Route path="/todo" element={<ToDoBase/>} />
+            <Route path="/todo" element={<ToDoBase />} />
+            <Route path="/senti" element={<Sentiment />} />
           </Routes>
         </BrowserRouter>
-      </RecoilRoot>
+      </main>
+    </RecoilRoot>
+    }></BackGroundColor>
+      
+    </>
   );
 }
 
