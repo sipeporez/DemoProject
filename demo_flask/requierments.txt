@@ -1,0 +1,6 @@
+joblib
+konlpy
+flask
+scikit-learn
+
+# pip install -r .\requierments.txt
