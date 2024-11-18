@@ -3,25 +3,22 @@ package com.example.demo.config.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.demo.domain.MemberDAO;
+import com.example.demo.domain.dao.member.MemberDAO;
+import com.example.demo.service.CustomUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Date;
@@ -60,16 +57,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                          FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
 
-        User user = (User) authResult.getPrincipal();
+        CustomUserDetails user = (CustomUserDetails) authResult.getPrincipal();
 
         String KEY = "rrwerkwer--werm#%$we67rmewrm33@!#kro3)(%#JTgfJ_V#VTJ$)334#mfewkmf";
         String token = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 토큰 만료시간 설정
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 6000)) // 토큰 만료시간 설정
                 .withClaim("userid", user.getUsername())
                 .sign(Algorithm.HMAC256(KEY));
 
+
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         response.setStatus(HttpStatus.OK.value());
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(user.getNickname());
     }
 
 }

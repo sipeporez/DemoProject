@@ -39,7 +39,7 @@ public class ToDoController {
 
     // ToDo 삭제 컨트롤러
     @DeleteMapping("/todo/delete/{idx}")
-    public ResponseEntity<?> deleteToDoList(@PathVariable("idx") Integer idx) {
+    public ResponseEntity<?> deleteToDoList(@PathVariable("idx") Long idx) {
         ts.deleteToDoLis(idx);
         return ResponseEntity.ok("삭제 완료");
     }

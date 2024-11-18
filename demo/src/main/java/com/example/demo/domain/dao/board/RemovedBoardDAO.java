@@ -1,7 +1,6 @@
 package com.example.demo.domain.dao.board;
 
 
-import com.example.demo.domain.dao.member.MemberDAO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,19 +14,18 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "board", indexes = {
-        @Index(name = "idx_desc_index", columnList = "idx DESC")
-})
-public class BoardDAO {
+@Table(name = "removed_board")
+public class RemovedBoardDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer boardIndex;
+
+    @Column(name = "idx")
     private Integer idx;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userid", referencedColumnName = "userid",
-            nullable = false)
-    private MemberDAO member;
+    @Column(name="userid", length = 16)
+    private String userid;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -38,10 +36,9 @@ public class BoardDAO {
     @CreationTimestamp
     private LocalDateTime writtenDate;
 
-    @Column(name = "like_cnt", nullable = false)
-    @Builder.Default
-    private Long likeCnt = 0L;
+    @CreationTimestamp
+    private LocalDateTime removedDate;
 
-    @Builder.Default
-    private Boolean edited = false;
+    @Column(name = "like_cnt", nullable = false)
+    private Long likeCnt;
 }

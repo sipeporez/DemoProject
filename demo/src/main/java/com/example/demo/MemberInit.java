@@ -12,13 +12,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -32,6 +39,8 @@ public class MemberInit implements ApplicationRunner {
     private final static String ADMIN_PASSWORD = "11";
     private final RandomStringGenerator rns;
     private final JdbcTemplate jdbc;
+    private final ApplicationContext ac;
+
 
     @Transactional
     private void addAdmin() {
@@ -73,7 +82,7 @@ public class MemberInit implements ApplicationRunner {
                 cr.save(CommentDAO.builder()
                         .member(mr.findById(userid).get())
                         .content(rns.generateRandomString())
-                        .boardIdx(br.findById(k).get())
+                        .board(br.findById(k).get())
                         .build());
             }
         }
@@ -82,12 +91,21 @@ public class MemberInit implements ApplicationRunner {
 
     // reply 외래키 추가 메서드
     private void addForeignKey() {
-        String sql = "ALTER TABLE board_comment_reply " +
-                "ADD CONSTRAINT fk_comment_id_for_reply " +
-                "FOREIGN KEY (comment_id) REFERENCES board_comment(comment_id) " +
-                "ON DELETE SET NULL;";
-        jdbc.execute(sql);
-
+        try{
+            String sql = "ALTER TABLE board_comment_reply " +
+                    "ADD CONSTRAINT fk_comment_id_for_reply " +
+                    "FOREIGN KEY (comment_id) REFERENCES board_comment(comment_id) " +
+                    "ON DELETE SET NULL;";
+            jdbc.execute(sql);
+        } catch (UncategorizedSQLException e) {
+            if (e.getCause() instanceof SQLException sqlException) {
+                // 다른 예외는 처리
+                if (sqlException.getErrorCode() == 1061) { // MySQL의 경우 에러 코드 1061은 중복 트리거를 나타냄
+                    // 중복 트리거가 있으므로 무시
+                    System.out.println("트리거가 이미 존재합니다. 무시합니다.");
+                } else e.getCause();
+            } else e.getCause();
+        }
         log.info("Reply 외래키 추가 완료");
     }
 
@@ -115,11 +133,35 @@ public class MemberInit implements ApplicationRunner {
         log.info("Comment 트리거 추가 완료");
     }
 
+    // procedure.sql 실행
+    private void createMySQLProcedure() throws IOException {
+        Resource res = ac.getResource("classpath:procedure.sql");
+        String sql;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(res.getInputStream()))) {
+            sql = reader.lines().collect(Collectors.joining("\n"));
+        }
+
+        // SQL을 개별 프로시저로 분리
+        String[] procedures = sql.split("CREATE PROCEDURE");
+        // 기존 프로시저 제거
+        jdbc.execute("DROP PROCEDURE IF EXISTS `RemoveBoard`;");
+        jdbc.execute("DROP PROCEDURE IF EXISTS `RemoveComment`;");
+        jdbc.execute("DROP PROCEDURE IF EXISTS `RemoveReply`;");
+
+        // 첫 번째 빈 문자열은 제거
+        for (int i = 1; i < procedures.length; i++) {
+            String procedure = "CREATE PROCEDURE" + procedures[i];
+            jdbc.execute(procedure);
+        }
+        log.info("프로시저 생성 완료");
+    }
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         addCommentTrigger();
         addForeignKey();
+        createMySQLProcedure();
         addAdmin();
-        addUser();
+//        addUser();
     }
 }

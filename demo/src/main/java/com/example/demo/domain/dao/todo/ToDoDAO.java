@@ -18,7 +18,7 @@ public class ToDoDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer idx;
+    public Long idx;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false,

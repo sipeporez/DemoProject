@@ -39,7 +39,7 @@ public class CommentService {
 
         cr.save(CommentDAO.builder()
                 .member(mem)
-                .boardIdx(br.findById(idx)
+                .board(br.findById(idx)
                         .orElseThrow(() -> new BoardNotFoundException("게시글을 찾을 수 없습니다.")))
                 .content(dto.getContent())
                 .build());
@@ -58,6 +58,7 @@ public class CommentService {
         // 댓글 작성자와 수정자가 일치하는지 검증
         if (memVal.checkMemberAuthorization(mem,dao.getMember().getUserid())) {
             dao.setContent(dto.getContent());
+            dao.setEdited(true);
             cr.save(dao);
         } else throw new MemberMismatchException("댓글 작성자만 수정할 수 있습니다.");
     }
@@ -72,7 +73,7 @@ public class CommentService {
         MemberDAO mem = memVal.findMemberIDFromToken();
         // 댓글 작성자와 삭제자가 일치하는지 검증
         if (memVal.checkMemberAuthorization(mem,dao.getMember().getUserid())) {
-            cr.deleteComment(idx);
+            cr.removeComment(idx, mem.getRole().toString());
         } else throw new MemberMismatchException("댓글 작성자만 삭제할 수 있습니다.");
     }
 }

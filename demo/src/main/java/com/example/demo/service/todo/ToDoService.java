@@ -28,7 +28,7 @@ public class ToDoService {
     }
 
     // 새항목 추가 버튼 누를 시 저장 -> enabled가 false
-    public Integer saveToDoList(ToDoDTO dto) {
+    public Long saveToDoList(ToDoDTO dto) {
         // 사용자 검증
         MemberDAO mem = memVal.findMemberIDFromToken();
         // 입력값 검증
@@ -44,7 +44,7 @@ public class ToDoService {
 
     // 체크 누를 시 Boolean만 변경
     @Transactional
-    public void changeCompleteToDoList(Integer idx) {
+    public void changeCompleteToDoList(Long idx) {
         // 사용자 검증
         MemberDAO mem = memVal.findMemberIDFromToken();
         // 프론트로부터 index값 받아서 해당 항목 찾기
@@ -74,7 +74,7 @@ public class ToDoService {
 
     // ToDoList 삭제 메서드
     @Transactional
-    public void deleteToDoLis(Integer idx) {
+    public void deleteToDoLis(Long idx) {
         // 사용자 검증
         MemberDAO mem = memVal.findMemberIDFromToken();
         // 프론트로부터 index값 받아서 해당 항목 찾기

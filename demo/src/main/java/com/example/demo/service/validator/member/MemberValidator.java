@@ -31,6 +31,19 @@ public class MemberValidator {
         throw new MemberNotFoundException("인증되지 않은 사용자입니다.");
     }
 
+    // 토큰으로 인증된 사용자 객체 반환 메서드 (이메일 인증용)
+    public MemberDAO findMemberIDFromTokenForEmailVerify() {
+        MemberDAO mem = null;
+        Authentication authen = SecurityContextHolder.getContext().getAuthentication();
+        // JWT 토큰을 통해 사용자가 인증되었는지 검사
+        if (authen != null && authen.isAuthenticated()) {
+            // 사용자가 DB에 있는지 검사
+            mem = mr.findById(authen.getName())
+                    .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
+        }
+        return mem;
+    }
+
     public boolean checkMemberAuthorization(MemberDAO mem, String userid) {
         if (mem == null) return false;
         return mem.getRole().equals(Role.ROLE_ADMIN) || mem.getUserid().equals(userid);

@@ -5,7 +5,6 @@ import com.example.demo.domain.dao.member.MemberDAO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
 
@@ -16,10 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "board_comment",
-indexes = {
-        @Index(name = "idx_comment_id", columnList = "comment_id", unique = true)
-})
+@Table(name = "board_comment")
 public class CommentDAO {
 
     @Id
@@ -42,14 +38,20 @@ public class CommentDAO {
     @JoinColumn(name = "board_idx", referencedColumnName = "idx",
             nullable= false,
             foreignKey = @ForeignKey(
-                    name = "fk_board_idx",
+                    name = "fk_board_idx_for_comment",
                     foreignKeyDefinition = "FOREIGN KEY (board_idx) REFERENCES board(idx) ON DELETE CASCADE"))
-    private BoardDAO boardIdx;
+    private BoardDAO board;
 
     @Column(length = 500, nullable = false)
     private String content;
 
     @CreationTimestamp
     private LocalDateTime writtenDate;
+
+    @Builder.Default
+    private Boolean edited = false;
+
+    @Builder.Default
+    private Boolean deleted = false;
 
 }
