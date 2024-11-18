@@ -22,7 +22,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/join")
                 .allowCredentials(true)
@@ -35,7 +39,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/role")
                 .allowCredentials(true)
@@ -48,7 +56,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/checkid")
                 .allowCredentials(true)
@@ -61,7 +73,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/checknick")
                 .allowCredentials(true)
@@ -74,7 +90,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/checkauth")
                 .allowCredentials(true)
@@ -87,7 +107,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/verifyemail")
                 .allowCredentials(true)
@@ -100,7 +124,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/verifykey")
                 .allowCredentials(true)
@@ -113,7 +141,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/turnstile")
                 .allowCredentials(true)
@@ -126,7 +158,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/board/**")
                 .allowCredentials(true)
@@ -142,7 +178,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/board/view/*/comment")
                 .allowCredentials(true)
@@ -155,7 +195,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/board/view/*/reply")
                 .allowCredentials(true)
@@ -168,7 +212,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/board/view/*/comment/write")
                 .allowCredentials(true)
@@ -181,7 +229,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/comment/**")
                 .allowCredentials(true)
@@ -195,7 +247,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
         registry.addMapping("/reply/**")
                 .allowCredentials(true)
@@ -210,7 +266,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
 
         registry.addMapping("/todo/**")
@@ -228,7 +288,11 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://110.13.52.11:8080",
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
-                        "http://110.13.52.11:3000"
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
                 );
     }
 }

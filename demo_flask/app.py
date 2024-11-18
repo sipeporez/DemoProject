@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify
 from konlpy.tag import Okt
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 
 okt = Okt()
 # Flask는 전역변수를 허용하기로 함 (웹서버는 전역변수 사용 불가)

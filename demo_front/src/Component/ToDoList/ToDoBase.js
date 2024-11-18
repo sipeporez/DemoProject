@@ -74,14 +74,10 @@ const ToDoBase = () => {
 
     // 페이지 최초 로드 시 DB에서 데이터 가져오기
     useEffect(() => {
-        const fetchData = async () => {
-            if (await CheckEnabled()) {
-                getToDoData();
-            }
-        }
-        fetchData();
+        CheckEnabled()
+        getToDoData();
     }, [])
-
+    
     // DB 저장된 데이터 가져오기
     const getToDoData = async () => {
         try {
