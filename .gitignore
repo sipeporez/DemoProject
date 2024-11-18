@@ -451,3 +451,5 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,intellij+all,windows,java,react,node,macos,netbeans,eclipse,visualstudiocode
+demo/src/main/java/com/example/demo/service/TurnstileService.java
+demo/src/main/java/com/example/demo/service/member/EmailService.java
