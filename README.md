@@ -17,7 +17,7 @@
 - **Spring Framework**
   - **Spring Boot**: 백엔드 서버, REST API Controller / Service 구현
   - **Spring Data JPA**: MySQL과의 데이터 연동 및 CRUD 구현
-  - **JWT (JSON Web Token)**: 사용자의 인증 정보 및 세션 처리
+  - **JWT (JSON Web Token)**: 사용자 인증 정보 및 세션 처리
   - **Spring Security**: 사용자 인증 및 인가 기능 구현
   - **Spring Mail**: 회원가입 시 이메일 전송 및 인증 기능 구현
 
@@ -31,7 +31,7 @@
 
 ### 3. 데이터베이스
 - **MySQL**: Spring Data JPA를 통한 연동
-  - **MySQL 프로시저**: 데이터베이스 내에서 복잡한 로직을 처리하기 위한 저장 프로시저 사용
+  - **MySQL 프로시저**: 게시판 관련 삭제 작업 시 삭제 전 내용을 백업하는 프로시저 구현
   - **Index, Explain**: Explain과 Index를 이용한 쿼리문 성능 분석 및 최적화
 
 ### 4. 자동화 방지 및 보안
