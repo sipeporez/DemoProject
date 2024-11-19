@@ -1,9 +1,9 @@
 # 데모 웹 프로젝트
+## 현재 주소 : http://d2x0bexp13nzpb.cloudfront.net/
 #### 작성 일자 : 2024-11-19(화)
 #### 수정 일자 : 2024-11-19(화)
+#### 개발 일지 : https://wistful-book-17c.notion.site/72e7b6219c52477d9362fd5985cf487b
 
-## 현재 주소 : http://d2x0bexp13nzpb.cloudfront.net/
-## 개발 일지 : https://wistful-book-17c.notion.site/72e7b6219c52477d9362fd5985cf487b
 ## 목표
 - Cloudflare Turnstile을 활용한 자동화 봇 프로그램 방지
 - Spring Data JPA를 이용한 MySQL 연동 CRUD 게시판과 To-DO List
@@ -11,6 +11,14 @@
 - AWS EC2, S3를 이용한 웹사이트 배포
 - Flask, Scikit-learn을 이용한 감성분석 AI 모델 연동
 - Tailwind CSS를 이용한 모바일-PC 반응형 웹
+
+## TODO
+- OAuth 2.0 로그인 구현
+- WebSocket을 이용한 실시간 채팅
+- 무한 스크롤, Skeleton UI를 적용한 블로그 (게시판 확장)
+- Session Storage 방식을 Cookie로 변경
+- HTTPS 적용
+- UI/UX 보완
 
 ## 적용 기술
 ### 1. 백엔드
