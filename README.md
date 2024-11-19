@@ -3,7 +3,7 @@
 #### 수정 일자 : 2024-11-19(화)
 
 ## 현재 주소 : http://d2x0bexp13nzpb.cloudfront.net/
-
+## 개발 일지 : https://wistful-book-17c.notion.site/72e7b6219c52477d9362fd5985cf487b
 ## 목표
 - Cloudflare Turnstile을 활용한 자동화 봇 프로그램 방지
 - Spring Data JPA를 이용한 MySQL 연동 CRUD 게시판과 To-DO List
