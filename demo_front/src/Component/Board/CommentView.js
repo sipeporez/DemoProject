@@ -7,6 +7,7 @@ import { LoginState } from '../../Recoil/LoginStateAtom';
 import { useRecoilValue } from 'recoil';
 import LineBreak from '../Util/LineBreak';
 import CommentEdit from '../Form/CommentEdit';
+import Paging from '../UI/Paging';
 
 const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
     const [comments, setComments] = useState([]);
@@ -15,7 +16,11 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
     const [replys, setReplys] = useState([]);
     const [replysID, setReplysID] = useState('');
 
-    const [page, setPage] = useState({ number: 0, size: 10, totalElements: 0 });
+    const [page, setPage] = useState({
+        number: 0,
+        size: 10,
+        totalElements: 0
+    });
     const nickname = sessionStorage.getItem("user");
     const CheckAdmin = sessionStorage.getItem("CheckAdmin");
     const loginCheck = useRecoilValue(LoginState);
@@ -26,18 +31,14 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
     }, [page.number, page.size, boardIdx, commentState]);
 
     // 댓글 가져오기
-    const fetchComments = async (currentPage, pageSize) => {
+    const fetchComments = async (number, size) => {
         try {
             await CustomAxios({
                 methodType: 'get',
-                backendURL: `board/view/${boardIdx}/comment?page=${currentPage}&size=${pageSize}`,
+                backendURL: `board/view/${boardIdx}/comment?page=${number}&size=${size}`,
                 onResponse: (resp) => {
                     setComments(resp.content);
-                    setPage({
-                        number: resp.page.number,
-                        size: resp.page.size,
-                        totalElements: resp.page.totalElements,
-                    });
+                    setPage({ ...resp.page });
                 },
             });
         }
@@ -53,7 +54,7 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
                 methodType: 'get',
                 backendURL: `board/view/${boardIdx}/reply`,
                 onResponse: (resp) => {
-                    setReplys(resp)
+                    setReplys(resp.sort((a, b) => a.idx - b.idx))
                 },
             });
         }
@@ -62,9 +63,25 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
         }
     };
 
-    const handlePageChange = (newPage) => {
-        setPage((prev) => ({ ...prev, number: newPage }));
+    // 댓글 페이지네이션 (페이지 클릭시 fetch 후 스크롤)
+    // 백앤드 pageNumber는 0부터 시작하므로 -1
+    const handlePageChange = (pageNumber) => {
+        fetchComments(pageNumber - 1, page.size);
+        handleScroll("comment");
     };
+
+    // 페이지 클릭시 댓글 최상단으로 스크롤
+    const handleScroll = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            const navBarSize = 64;  // Nav바 사이즈(px)
+            const position = element.offsetTop - navBarSize;
+            window.scrollTo({
+                top: position,
+                behavior: 'auto'
+            });
+        }
+    }
 
     // 댓글 수정
     const handleCommentEdit = async (commentId) => {
@@ -129,17 +146,13 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
         }
     }
 
-
-
-    const totalPages = Math.ceil(page.totalElements / page.size);
-
     return (
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-center items-center' id="comment">
             {comments &&
                 <div className="flex flex-col bg-gray-300 rounded-lg w-full h-full max-w-screen-xl">
                     {comments.map((comment, index) => (
                         <div key={comment.idx} className="my-2">
-                            <div className="text-start text-sm font-bold">{comment.nickname}{comment.edited && !comment.deleted ?<span className='text-xs font-thin text-gray-500 ml-2'>(댓글 수정됨)</span>:null}</div>
+                            <div className="text-start text-sm font-bold">{comment.nickname}{comment.edited && !comment.deleted ? <span className='text-xs font-thin text-gray-500 ml-2'>(댓글 수정됨)</span> : null}</div>
                             <div className='flex'>
                                 <div className="text-start ml-2 w-full break-words">
                                     {commentID === comment.commentId ?
@@ -155,7 +168,7 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
                                         </label> : null
                                         }</div>
                                     <div>
-                                        {((comment.nickname === nickname && !comment.deleted) || 
+                                        {((comment.nickname === nickname && !comment.deleted) ||
                                             (!comment.deleted && CheckAdmin === 'X')) ? <label>
                                             <PencilSquareIcon
                                                 className='w-4 h-4'
@@ -163,7 +176,7 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
                                         </label> : <div className='px-2' />
                                         }</div>
                                     <div>
-                                        {((comment.nickname === nickname && !comment.deleted) || 
+                                        {((comment.nickname === nickname && !comment.deleted) ||
                                             (!comment.deleted && CheckAdmin === 'X')) ? <label>
                                             <TrashIcon className='w-4 h-4'
                                                 onClick={() => handleCommentDelete(comment.idx)} />
@@ -207,21 +220,18 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
 
                     {/* 페이지네이션 */}
                     <div className="flex justify-between items-center mt-4">
-                        <button
-                            onClick={() => handlePageChange(page.number - 1)}
-                            disabled={page.number === 0}
-                            className={`px-3 py-1 bg-blue-500 text-white rounded ${page.number === 0 && 'opacity-50 cursor-not-allowed'}`}
-                        >
-                            이전 댓글
-                        </button>
-                        <span>{`${page.number + 1} / ${totalPages}`}</span>
-                        <button
-                            onClick={() => handlePageChange(page.number + 1)}
-                            disabled={page.number >= totalPages - 1}
-                            className={`px-3 py-1 bg-blue-500 text-white rounded ${page.number >= totalPages - 1 && 'opacity-50 cursor-not-allowed'}`}
-                        >
-                            다음 댓글
-                        </button>
+                        <div className='w-full flex justify-center items-center'>
+                            {page && <Paging
+                                activePage={page.number + 1}
+                                itemsCountPerPage={page.size}
+                                totalItemsCount={page.totalElements}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageChange}
+                                activeLinkClass={'bg-gray-400 rounded px-1 py-0.5'}
+                                onClick={() => { handleScroll("comment") }}
+                            />
+                            }
+                        </div>
                     </div>
                 </div>
             }

@@ -7,6 +7,7 @@ import com.example.demo.domain.dto.board.BoardPageDTO;
 import com.example.demo.domain.dto.board.WriteBoardDTO;
 import com.example.demo.exception.BoardNotFoundException;
 import com.example.demo.exception.MemberMismatchException;
+import com.example.demo.exception.WrongInputException;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.LikeBoardRepository;
 import com.example.demo.service.validator.board.BoardInputValidator;
@@ -44,6 +45,11 @@ public class BoardSerivce {
     // 게시글 페이지네이션 메서드
     public Page<BoardPageDTO> getBoardPage(Pageable pageable) {
         return br.getBoards(pageable);
+    }
+
+    // 게시글 검색 페이지네이션 메서드
+    public Page<BoardPageDTO> searchBoardPage(Pageable pageable, String type, String key) {
+        return br.searchBoards(pageable, type, key);
     }
 
     // 유저 Enabled 확인
@@ -124,7 +130,7 @@ public class BoardSerivce {
         BoardDAO dao = br.findBoardByIdWithMember(idx)
                 .orElseThrow(() -> new BoardNotFoundException("게시글을 찾을 수 없습니다."));
         // 사용자 검증
-        MemberDAO mem = memVal.findMemberIDFromToken();
+        MemberDAO mem = memVal.findMemberIDFromTokenForBoardLike();
         // 좋아요 검증
         return lr.checkBoardLike(mem.getUserid(), dao.getIdx()) == 1;
     }

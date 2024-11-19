@@ -6,6 +6,8 @@ import TimeCalc from '../Util/TimeCalc';
 import Paging from '../UI/Paging';
 import { useRecoilValue } from 'recoil';
 import { LoginState } from '../../Recoil/LoginStateAtom';
+import SearchInput from '../Form/SearchInput';
+import Spinner from '../UI/Spinner';
 
 const BoardList = () => {
     const [data, setData] = useState([]);
@@ -15,38 +17,84 @@ const BoardList = () => {
         totalElements: 0,  // 전체 항목 수
     });
 
+    const [searchMode, setSearchMode] = useState(false);
+    const [searchParams, setSearchParams] = useState({ type: "", keyword: "" });
+
+    const [loading, setLoading] = useState(false);
+    const [boardIdx, setBoardIdx] = useState('');
     const checkLogin = useRecoilValue(LoginState);
 
-
-    const [boardIdx, setBoardIdx] = useState('');
-
-    // 페이지 최초 로딩 시 게시글 데이터 가져오기
+    // 페이지 최초 로딩 시 게시판 데이터 가져오기
     useEffect(() => {
         fetchData(page.number, page.size);
-    }, [page.number, page.size]);
+    }, []);
 
-    // fetch 함수
-    const fetchData = async (number, size) => {
+    // fetch Data
+    const fetchData = async (page, size) => {
+        setLoading(true);
         try {
             await CustomAxios({
                 methodType: 'get',
-                backendURL: `board/list?page=${number}&size=${size}`,
+                backendURL: `board/list?page=${page}&size=${size}`,
                 onResponse: (resp) => {
                     setData(resp.content);
                     setPage({ ...resp.page });
+                    setSearchMode(false);
+                    setLoading(false);
                 }
             });
-        }catch (error) {
-            alert (error.response.data);
-            window.location.href = "/login";
+        } catch (error) {
+            setLoading(false);
+            alert(error.response.data);
             return;
         }
     };
 
+    // search Data
+    const searchData = async (page, size) => {
+        setLoading(true);
+        try {
+            await CustomAxios({
+                methodType: 'get',
+                backendURL: `board/search?page=${page}&size=${size}&type=${searchParams.type}&keyword=${searchParams.keyword}`,
+                onResponse: (resp) => {
+                    setData(resp.content);
+                    setPage({ ...resp.page });
+                    setLoading(false);
+                }
+            });
+        } catch (error) {
+            setLoading(false);
+            alert(error.response.data);
+            return;
+        }
+    };
+
+    // SearchInput 컴포넌트용 핸들러
+    // 타입과 키워드 저장 후 검색모드 활성화
+    const handleSearch = (type, keyword) => {
+        setSearchParams({ type, keyword });
+        setSearchMode(true);
+    };
+
+    // 검색 결과 렌더링용 useEffect
+    useEffect(() => {
+        if (searchMode && searchParams.keyword !== "") {
+            searchData(0, page.size);
+        }
+    }, [searchParams]);
+
+
     // 페이지네이션
     // 백앤드 pageNumber는 0부터 시작하므로 -1
+    // 검색모드일 경우 searchData, 아닐경우 fetchData
     const handlePageChange = (pageNumber) => {
-        fetchData(pageNumber - 1, page.size);
+        if (searchMode) {
+            searchData(pageNumber - 1, page.size);
+        }
+        else {
+            fetchData(pageNumber - 1, page.size);
+        }
     };
 
     // 게시글 클릭시 게시글 번호 저장 및 스크롤
@@ -54,7 +102,6 @@ const BoardList = () => {
         setBoardIdx(idx)
         window.scrollTo(0, 0)
     }
-
     return (
         <div className='ml-0 lg:ml-32 xl:ml-48'>
             {boardIdx &&
@@ -71,7 +118,15 @@ const BoardList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data && data.map((item) => (
+                            {loading ? (
+                                <tr>
+                                    <td colSpan="4" className="py-8">
+                                        <div className="flex justify-center items-center">
+                                            <Spinner height={8} width={8} border={4} />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (data && data.map((item) => (
                                 <tr
                                     key={item.idx}
                                     onClick={() => handleBoardIdx(item.idx)}
@@ -81,8 +136,7 @@ const BoardList = () => {
                                     <td className='text-center w-fit md:w-[10%] py-2'>{<TimeCalc time={item.writtenDate} />}</td>
                                     <td className='text-center w-fit md:w-[10%] py-2'>{item.likeCnt}</td>
                                 </tr>
-                            ))
-                            }
+                            )))}
                         </tbody>
                     </table>
                     <div className='flex justify-center rounded-b-lg items-center bg-white'>
@@ -95,7 +149,8 @@ const BoardList = () => {
                                 onPageChange={handlePageChange} />
                         }
                     </div>
-                    {checkLogin ? <div className='float-right mt-2'>
+                    {checkLogin ? <div className='mt-2 w-full flex gap-2 justify-between items-center'>
+                        <SearchInput onSearch={handleSearch} />
                         <BoardWriteModal />
                     </div> : null}
                 </div>

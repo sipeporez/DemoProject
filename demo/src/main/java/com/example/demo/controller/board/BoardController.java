@@ -24,6 +24,15 @@ public class BoardController {
         return ResponseEntity.ok(bs.getBoardPage(pageable));
     }
 
+    // 게시글 검색 컨트롤러 (페이지네이션)
+    @GetMapping("/board/search")
+    public ResponseEntity<?> searchBoardList(
+            @PageableDefault(page = 0, size = 5, sort = "idx", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam("type") String type,
+            @RequestParam("keyword") String key) {
+        return ResponseEntity.ok(bs.searchBoardPage(pageable, type, key));
+    }
+
     // 게시글 1개 조회 컨트롤러
     @GetMapping("/board/view/{idx}")
     public ResponseEntity<?> getBoards(@PathVariable("idx") Integer idx) {
