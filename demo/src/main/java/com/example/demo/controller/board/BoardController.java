@@ -39,6 +39,12 @@ public class BoardController {
         return ResponseEntity.ok(bs.getBoardOnce(idx));
     }
 
+    // 게시글 마지막 번호 조회 컨트롤러 (무한 스크롤용)
+    @GetMapping("/board/last")
+    public ResponseEntity<?> findBoardLast() {
+        return  ResponseEntity.ok(bs.findBoardLastIdx());
+    }
+
     // 게시글 작성버튼 클릭시 사용자가 인증되었는지 확인하는 컨트롤러
     @GetMapping("/board/checkUser")
     public ResponseEntity<?> checkUser() {

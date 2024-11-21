@@ -39,4 +39,9 @@ public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
     // 게시글 삭제 프로시저
     @Procedure(name = "RemoveBoard")
     void removeBoard(@Param("idx") Integer idx);
+
+    // 마지막 게시글 번호 가져오기
+    @Query(nativeQuery = true, value = "SELECT idx FROM board LIMIT 1")
+    Integer findBoardLastIdx();
+
 }

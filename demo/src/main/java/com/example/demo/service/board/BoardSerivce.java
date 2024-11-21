@@ -42,6 +42,11 @@ public class BoardSerivce {
                 .build();
     }
 
+    // 게시글 마지막 번호 확인 메서드
+    public Integer findBoardLastIdx() {
+        return br.findBoardLastIdx();
+    }
+
     // 게시글 페이지네이션 메서드
     public Page<BoardPageDTO> getBoardPage(Pageable pageable) {
         return br.getBoards(pageable);

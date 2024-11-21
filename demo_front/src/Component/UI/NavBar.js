@@ -19,6 +19,7 @@ export default function NavBar() {
         { name: '게시판', href: '/home', current: true, needLogin: false },
         { name: 'To-Do List', href: '/todo', current: false, needLogin: true },
         { name: '감성분석', href: '/senti', current: false, needLogin: true },
+        { name: '무한 스크롤', href: '/scroll', current: false, needLogin: false },
     ]
 
     function classNames(...classes) {
