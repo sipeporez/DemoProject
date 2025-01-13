@@ -18,5 +18,6 @@ public class BoardDTO {
     private LocalDateTime writtenDate;
     private Long likeCnt;
     private Boolean edited;
+    private Boolean hasImage;
 
 }

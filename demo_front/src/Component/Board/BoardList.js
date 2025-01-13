@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { LoginState } from '../../Recoil/LoginStateAtom';
 import SearchInput from '../Form/SearchInput';
 import Spinner from '../UI/Spinner';
+import { PhotoIcon } from '@heroicons/react/24/outline'
 
 const BoardList = () => {
     const [data, setData] = useState([]);
@@ -120,8 +121,8 @@ const BoardList = () => {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan="4" className="py-8">
-                                        <div className="flex justify-center items-center">
+                                    <td colSpan="4">
+                                        <div className="flex justify-center items-center py-[171px]">
                                             <Spinner height={8} width={8} border={4} />
                                         </div>
                                     </td>
@@ -131,7 +132,20 @@ const BoardList = () => {
                                     key={item.idx}
                                     onClick={() => handleBoardIdx(item.idx)}
                                     className='hover:bg-opacity-10 hover:bg-black duration-150 border-b-2 transition-colors break-all text-sm md:text-md'>
-                                    <td className='text-start w-[30%] md:w-[50%] py-2 pl-2'>{item.title.length > 25 ? item.title.slice(0, 25) + '...' : item.title}</td>
+                                    <td className='text-start w-[30%] md:w-[50%] py-2 pl-2'>
+                                        {item.title.length > 25 ?
+                                            (<div className='flex'>
+                                                {item.title.slice(0, 25) + '...'}
+                                                {item.hasImage && <PhotoIcon className='w-4 ml-2 mt-[1px]' />}
+                                            </div>
+                                            )
+                                            : (
+                                                <div className='flex'>
+                                                    {item.title}
+                                                    {item.hasImage && <PhotoIcon className='w-4 ml-2 mt-[1px]' />}
+                                                </div>
+                                            )}
+                                    </td>
                                     <td className='text-center w-fit md:w-[30%] py-2'>{item.nickname.length > 10 ? item.nickname.slice(0, 10) + '...' : item.nickname}</td>
                                     <td className='text-center w-fit md:w-[10%] py-2'>{<TimeCalc time={item.writtenDate} />}</td>
                                     <td className='text-center w-fit md:w-[10%] py-2'>{item.likeCnt}</td>

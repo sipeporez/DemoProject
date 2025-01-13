@@ -44,4 +44,7 @@ public class BoardDAO {
 
     @Builder.Default
     private Boolean edited = false;
+
+    @Builder.Default
+    private Boolean hasImage = false;
 }

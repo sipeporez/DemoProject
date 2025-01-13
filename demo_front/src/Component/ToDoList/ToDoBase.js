@@ -74,8 +74,12 @@ const ToDoBase = () => {
 
     // 페이지 최초 로드 시 DB에서 데이터 가져오기
     useEffect(() => {
-        CheckEnabled()
-        getToDoData();
+        // 비동기 처리 (1. enabled 확인 / 2. DB 데이터 가져오기)
+        const checkDB = async () => {
+            await CheckEnabled();
+            await getToDoData();
+        }
+        checkDB();
     }, [])
     
     // DB 저장된 데이터 가져오기
@@ -133,7 +137,7 @@ const ToDoBase = () => {
     return (
         <div className='flex flex-col justify-start items-center'>
             <div className='flex flex-col my-4 justify-center items-center w-full md:w-2/3 ml-0 lg:ml-32 xl:ml-48'>
-                <label className="block m-4 text-2xl font-bold text-gray-200 dark:text-white">To-Do List</label>
+                <label className="block m-4 text-2xl font-bold text-gray-200 dark:text-white font-Pretendard">To-Do List</label>
                 <textarea
                     ref={inputData}
                     rows="2"

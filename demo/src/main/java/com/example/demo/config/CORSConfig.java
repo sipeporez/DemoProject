@@ -45,6 +45,25 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
+        registry.addMapping("/oauthjoin")
+                .allowCredentials(true)
+                .allowedHeaders(HttpHeaders.CONTENT_TYPE,
+                        HttpHeaders.AUTHORIZATION)
+                .allowedMethods(
+                        HttpMethod.POST.name()
+                )
+                .allowedOrigins(
+                        "http://localhost:8080",
+                        "http://192.168.0.123:8080",
+                        "http://110.13.52.11:8080",
+                        "http://localhost:3000",
+                        "http://192.168.0.123:3000",
+                        "http://110.13.52.11:3000",
+                        "http://43.201.251.107:8080",
+                        "http://43.201.251.107:3000",
+                        "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
+                        "http://d2x0bexp13nzpb.cloudfront.net"
+                );
         registry.addMapping("/role")
                 .allowCredentials(true)
                 .allowedMethods(

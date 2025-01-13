@@ -23,13 +23,13 @@ public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
 
     // 게시글 페이지네이션
     // 생성자를 사용하여 직렬화된 PageDTO 페이지 반환
-    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt) "
+    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage) "
             +"FROM BoardDAO b JOIN b.member m")
     Page<BoardPageDTO> getBoards(Pageable pageable);
 
     // 게시글 검색 페이지네이션
     // 생성자를 사용하여 직렬화된 PageDTO 페이지 반환
-    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt) "
+    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage) "
             +"FROM BoardDAO b JOIN b.member m "
             + "WHERE (:type = 'title' AND b.title LIKE %:key%) "
             + "OR (:type = 'content' AND b.content LIKE %:key%) "
@@ -44,4 +44,10 @@ public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
     @Query(nativeQuery = true, value = "SELECT idx FROM board LIMIT 1")
     Integer findBoardLastIdx();
 
+    // 이미지가 업로드 된 경우 hasImage 갱신
+    @Modifying
+    @Query("UPDATE BoardDAO b " +
+            "SET b.hasImage = TRUE " +
+            "WHERE b.idx = :boardIdx")
+    void updateHasImageByBoardIdx(@Param("boardIdx") Integer boardIdx);
 }

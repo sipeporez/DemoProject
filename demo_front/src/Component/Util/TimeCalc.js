@@ -20,8 +20,7 @@ const TimeCalc = ({ time }) => {
     if (minutes > 0) {
         return `${minutes}분 전`;
     }
-    // 그 외는 초 단위로 ~초 전
-    return `${seconds}방금`;
+    return `방금`;
 }
 
 export default TimeCalc

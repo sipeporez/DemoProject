@@ -148,7 +148,7 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
 
     return (
         <div className='flex justify-center items-center' id="comment">
-            {comments &&
+            {comments && 
                 <div className="flex flex-col bg-gray-300 rounded-lg w-full h-full max-w-screen-xl">
                     {comments.map((comment, index) => (
                         <div key={comment.idx} className="my-2">
@@ -221,7 +221,7 @@ const CommentView = ({ boardIdx, commentState, onCommentWritten }) => {
                     {/* 페이지네이션 */}
                     <div className="flex justify-between items-center mt-4">
                         <div className='w-full flex justify-center items-center'>
-                            {page && <Paging
+                            {page.totalElements > 9 && <Paging
                                 activePage={page.number + 1}
                                 itemsCountPerPage={page.size}
                                 totalItemsCount={page.totalElements}

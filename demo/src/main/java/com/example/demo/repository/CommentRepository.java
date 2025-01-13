@@ -19,7 +19,8 @@ public interface CommentRepository extends JpaRepository <CommentDAO, Integer> {
     // 생성자를 사용하여 직렬화된 CommentDTO 반환
     @Query("SELECT new com.example.demo.domain.dto.board.CommentDTO " +
             "(c.board.idx, c.idx, c.commentId, c.member.nickname, c.content, c.writtenDate, c.edited, c.deleted) "
-            +"FROM CommentDAO c WHERE c.board.idx = :idx")
+            +"FROM CommentDAO c " +
+            "WHERE c.board.idx = :idx")
     Page<CommentDTO> getCommentByBoardIdx(Pageable pageable, @Param("idx") Integer idx);
 
     // 댓글 삭제 프로시저

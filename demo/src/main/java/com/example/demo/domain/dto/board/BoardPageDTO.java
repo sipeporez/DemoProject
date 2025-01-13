@@ -15,4 +15,5 @@ public class BoardPageDTO {
     private String title;
     private LocalDateTime writtenDate;
     private Long likeCnt;
+    private Boolean hasImage;
 }

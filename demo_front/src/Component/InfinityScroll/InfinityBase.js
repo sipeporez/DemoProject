@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import InfinityContent from './InfinityContent'
 import { CustomAxios } from '../CustomAxios';
 import Spinner from '../UI/Spinner';
+import BoardView from '../Board/BoardView';
 
 // 무한 스크롤 테스트 페이지
 
@@ -101,7 +102,7 @@ const InfinityBase = () => {
             // fetch 데이터 임의 지연
             setTimeout(() => {
                 setLoading(false)
-            }, 1000)
+            }, 500)
         } catch (error) {
             setLoading(false)
         }
@@ -114,6 +115,7 @@ const InfinityBase = () => {
                     return (
                         <div className='w-full mb-20' key={item.idx}>
                             <InfinityContent data={item} />
+                            {/* <BoardView boardIdx={page.current}/> */}
                         </div>)
                 })
                 }

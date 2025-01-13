@@ -6,6 +6,9 @@ import { CustomAxios } from './CustomAxios';
 import CheckAdmin from './Util/CheckAdmin';
 import CloudFlareTurnstile from './Util/CloudFlareTurnstile';
 import Spinner from './UI/Spinner';
+import NaverLogin from './Login/NaverLogin';
+import GoogleLogin from './Login/GoogleLogin';
+import KakaoLogin from './Login/KakaoLogin';
 
 export default function Login() {
     const [userid, setUserid] = useState('');
@@ -31,7 +34,7 @@ export default function Login() {
         if (remeberid) {
             localStorage.setItem("userid", userid);
         }
-        
+
         if (!userid || !userpw) {
             setLoading(false);
             alert("아이디와 비밀번호를 모두 입력해주세요.");
@@ -40,7 +43,7 @@ export default function Login() {
 
         if (!token) {
             setLoading(false);
-            alert('Turnstile 인증을 완료해주세요.');
+            alert('Turnstile 인증에 실패했습니다. 페이지를 새로고침 해주세요');
             return;
         }
 
@@ -87,39 +90,47 @@ export default function Login() {
     }
 
     return (
-        <div className='flex justify-center items-center w-full bg-body-tertiary'>
-            <div className="flex align-items-center py-4 ml-0 lg:ml-32 xl:ml-48 min-h-[calc(100vh-64px)]">
-                {loading ? <Spinner width={8} height={8} border={4} /> : <main className="form-signin w-100 m-auto">
-                    <form onSubmit={handleSubmit}>
-                        <div className="h3 mb-3">LOGIN</div>
-                        <div className="form-floating my-2">
-                            <input type="text" className="form-control" id="userid" placeholder="ID"
-                                maxLength={16}
-                                value={userid || ''}
-                                onChange={(e) => setUserid(e.target.value)} />
-                            <label htmlFor="userid">ID</label>
-                        </div>
-                        <div className="form-floating">
-                            <input type="password" className="form-control" id="userpw" placeholder="Password"
-                                value={userpw || ''}
-                                maxLength={64}
-                                onChange={(e) => setUserpw(e.target.value)} />
-                            <label htmlFor="userpw">Password</label>
-                        </div>
+        <div className='flex justify-center items-center w-full bg-body-tertiary font-Pretendard'>
+            <div className="flex align-items-center py-4 ml-0 lg:ml-32 xl:ml-48 min-h-[calc(100vh-64px)] min-w-[300px]">
+                {loading ? <div className='w-full flex justify-center'><Spinner width={8} height={8} border={4} /></div>
+                    : <main className="form-signin w-100 m-auto">
+                        <form onSubmit={handleSubmit}>
+                            <div className="h3 mb-3">LOGIN</div>
+                            <div className="form-floating my-2">
+                                <input type="text" className="form-control" id="userid" placeholder="ID"
+                                    maxLength={16}
+                                    value={userid || ''}
+                                    onChange={(e) => setUserid(e.target.value)} />
+                                <label htmlFor="userid">ID</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" id="userpw" placeholder="Password"
+                                    value={userpw || ''}
+                                    maxLength={64}
+                                    onChange={(e) => setUserpw(e.target.value)} />
+                                <label htmlFor="userpw">Password</label>
+                            </div>
 
-                        <div className="form-check text-start my-3">
-                            <input className="form-check-input" type="checkbox" id="remember-ID"
-                                onChange={(e) => setRememberID(e.target.checked)} />
-                            <label className="form-check-label" htmlFor="remember-ID">
-                                ID 기억하기
-                            </label>
+                            <div className="form-check text-start my-3">
+                                <input className="form-check-input" type="checkbox" id="remember-ID"
+                                    onChange={(e) => setRememberID(e.target.checked)} />
+                                <label className="form-check-label" htmlFor="remember-ID">
+                                    ID 기억하기
+                                </label>
+                            </div>
+                            <CloudFlareTurnstile setToken={setToken} />
+                            <button className="btn btn-primary w-100 py-2 mt-2" type="submit">로그인</button>
+                        </form>
+                        <button className="btn btn-success w-100 py-2 mt-2" type="button" onClick={() => { window.location.href = "/join" }}>회원가입</button>
+                        <div className='text-center w-full my-2'>
+                            <div className='mt-4 mb-2.5 text-sm'>소셜 로그인</div>
+                            <div className='flex justify-around'>
+                                <GoogleLogin /> <NaverLogin /> 
+                                {/* <KakaoLogin /> */}
+                            </div>
                         </div>
-                        <CloudFlareTurnstile setToken={setToken} />
-                        <button className="btn btn-primary w-100 py-2 mt-2" type="submit">로그인</button>
-                    </form>
-                    <button className="btn btn-success w-100 py-2 mt-2" type="button" onClick={() => { window.location.href = "/join" }}>회원가입</button>
-                    <p className="mt-5 mb-3 text-body-secondary">&copy; 2024 Seong</p>
-                </main>}
+                        <p className="mt-4 mb-3 text-body-secondary">&copy; 2024 Seong</p>
+                    </main>}
             </div>
         </div>
     )

@@ -3,7 +3,9 @@ module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
     fontFamily:{
-      Nanum: ["Nanum Gothic"]
+      Nanum: ["Nanum Gothic"],
+      Pretendard: ["Pretendard"],
+      NotoSansKR: ["Noto Sans KR"]
     },
     extend: {},
   },

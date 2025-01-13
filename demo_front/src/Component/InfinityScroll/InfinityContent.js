@@ -1,7 +1,7 @@
 import React from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import LikeButton from '../Board/LikeButton';
-import LineBreak from '../Util/LineBreak';
+import DOMPurifying from '../Util/DOMPurifying';
 
 const InfinityContent = ({ data }) => {
 
@@ -19,8 +19,10 @@ const InfinityContent = ({ data }) => {
                         {new Date(data.writtenDate).toLocaleString()}
                     </h6>
                     <div className="min-w-screen mx-3 border-t-2 my-2 border-gray-500" />
-                    <div className="text-lg text-start mx-3 mb-3 break-words">
-                        {LineBreak(data.content)}
+                    <div className="text-lg text-start mx-3 mb-3 break-words"
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurifying(data.content)
+                        }}>
                     </div>
                     <div className="flex justify-end items-end mx-3 mb-3">
                         {<LikeButton boardIdx={data.idx} likeCnt={data.likeCnt} />}

@@ -5,11 +5,13 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.demo.domain.dao.member.MemberDAO;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.tools.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +30,7 @@ import java.util.Optional;
 // 한번 필터를 거치고 나면 forwarding 되도 다시 이 필터를 거치지 않음 (OncePerRequestFilter)
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
     private final MemberRepository mr;
+    private final JWTUtil jwt;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -41,16 +44,10 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String jwtToken = srcToken.replace("Bearer ", "");
-        String KEY = "rrwerkwer--werm#%$we67rmewrm33@!#kro3)(%#JTgfJ_V#VTJ$)334#mfewkmf";
 
         // 토큰 복호화하여 username(userid) 추출
         try {
-            String username = JWT.require(Algorithm.HMAC256(KEY))
-                    .build()
-                    .verify(jwtToken)
-                    .getClaim("userid")
-                    .asString();
-
+            String username = jwt.getClaim(jwtToken);
 
             // userid가 DB에 존재하지 않는 경우 리턴
             Optional<MemberDAO> opt = mr.findById(username);

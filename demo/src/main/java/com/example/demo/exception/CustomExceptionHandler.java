@@ -49,6 +49,12 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage());
     }
+    // 파일 찾을 수 없음
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<String> handleFileUpload(FileUploadException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
 
     // 비회원 관련 (사용자 찾을 수 없음)
     @ExceptionHandler(MemberNotFoundException.class)

@@ -1,10 +1,13 @@
 import React, { useRef } from 'react';
 import { CustomAxios } from '../CustomAxios';
 import CustomButton from '../UI/CustomButton';
+import { useRecoilValue } from 'recoil';
+import { LoginState } from '../../Recoil/LoginStateAtom';
+import CheckEnabled from '../Util/CheckEnabled';
 
 const ReplyWrite = ({ boardIdx, commentId, onWrite }) => {
-    const checkLogin = sessionStorage.getItem('token');
     const inputData = useRef('');
+    const login = useRecoilValue(LoginState);
 
     // Enter키 입력을 감지하는 부분
     const handleKeyDown = (e) => {
@@ -14,8 +17,9 @@ const ReplyWrite = ({ boardIdx, commentId, onWrite }) => {
     };
 
     const handleWrite = async (e) => {
-        if (checkLogin) {
+        if (login) {
             if (inputData.current.value.trim() !== "") {
+                await CheckEnabled();
                 try {
                     await CustomAxios({
                         methodType: 'POST',

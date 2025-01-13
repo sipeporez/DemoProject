@@ -18,11 +18,11 @@ import com.example.demo.service.validator.member.JoinInputValidator;
 import com.example.demo.service.validator.member.MemberValidator;
 import com.example.demo.tools.RandomStringGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,9 @@ public class MemberService {
     private final MemberValidator memVal;
     private final EmailService es;
 
+    @Value("${jwt.key}")
+    private String KEY;
+
     public void saveRandomMember() {
         MemberDAO mem = MemberDAO.builder()
                 .userid(rans.generateRandomString())
@@ -42,11 +45,7 @@ public class MemberService {
                 .name("테스트")
                 .nickname(rans.generateRandomString())
                 .build();
-        LogDAO log = LogDAO.builder()
-                .member(mem)
-                .build();
         mr.save(mem);
-        lg.save(log);
     }
 
     public void saveMember(MemberDAO mem) {
@@ -67,13 +66,12 @@ public class MemberService {
             throw new DuplicatedException("이미 사용 중인 닉네임 입니다.");
         }
 
-        MemberDAO member = MemberDAO.builder()
+        mr.save(MemberDAO.builder()
                 .userid(mem.getUserid())
                 .userpw(enc.encode(mem.getUserpw()))
                 .name(mem.getName())
                 .nickname(mem.getNickname())
-                .build();
-        mr.save(member);
+                .build());
     }
 
     public String getRole() {
@@ -116,6 +114,15 @@ public class MemberService {
         }
     }
 
+    // OAuth2.0 로그인 전용 가입
+    public void oauthJoin(MemberDAO dao) {
+        // 토큰으로 userid 찾은 후 입력받은 이름, 닉네임으로 덮어쓰기
+        MemberDAO mem = memVal.findMemberIDFromToken();
+        mem.setName(dao.getName());
+        mem.setNickname(dao.getNickname());
+        mr.save(mem);
+    }
+
     // 이메일 JWT 생성
     public void createMailToken(MemberDAO dao) {
         // 유효성 검증 (이메일 유형, null값 확인)
@@ -129,7 +136,6 @@ public class MemberService {
             throw new DuplicatedException("이미 등록된 이메일 입니다.");
         }
 
-        String KEY = "dla$@@pdlf-dlswmdd^^yd-jwt@#xhzms-tod%#@%tjddyd-qhdk@$$@#!szlrkqt";
         String token = JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 토큰 만료시간 30분
                 .withClaim("userid", mem.getUserid())
@@ -141,24 +147,21 @@ public class MemberService {
     // 이메일 jwt 검증
     // 검증 후 해당 회원의 email 주소와 enabled 수정
     // 쿠키 사용시 memval 사용 가능, 수정 필요
+    // 현재는 LocalStorage에 만료시간 설정하여 5분내로 인증 완료해야 함
     public void verifyMailToken(EmailDTO dto) {
         try {
-            String KEY = "dla$@@pdlf-dlswmdd^^yd-jwt@#xhzms-tod%#@%tjddyd-qhdk@$$@#!szlrkqt";
             DecodedJWT token = JWT.require(Algorithm.HMAC256(KEY))
                     .build()
                     .verify(dto.getToken());
             String userid = token.getClaim("userid").asString();
             String email = token.getClaim("email").asString();
 
-            MemberDAO mem = mr.findById(userid)
-                    .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
-
-
+            MemberDAO mem = memVal.findMemberIDFromTokenForEmailVerify();
             if (userid.equals(mem.getUserid())) {
                 mem.setEmail(email);
                 mem.setEnabled(true);
                 mr.save(mem);
-            };
+            }
         } catch (JWTVerificationException e) {
             throw new MemberNotAuthorizationException("이메일 인증에 실패하였습니다. 다시 시도해 주세요.");
         }

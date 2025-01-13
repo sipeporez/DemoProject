@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export const CustomAxios = async ({ methodType, backendURL, fetchData, onResponse }) => {
+export const CustomAxios = async ({ methodType, backendURL, fetchData, onResponse, headers }) => {
     const URL = process.env.REACT_APP_SPRING_SERVER + backendURL;
     const timeout = 5000;
     
-    const headers = {
+    headers = {
         'Content-Type': 'application/json',
         'Authorization': sessionStorage.getItem('token')
     };
@@ -33,7 +33,9 @@ export const CustomAxios = async ({ methodType, backendURL, fetchData, onRespons
         }
         return response.data;
     } catch (error) {
-        // console.error(error.message+"::"+error.response.data);
-        throw error;
+        if (error.code === 'ECONNABORTED') {
+            alert("서버가 응답하지 않습니다.");
+        }
+        else throw error;
     }
 };

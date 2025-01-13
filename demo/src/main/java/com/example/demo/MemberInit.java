@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -60,7 +59,7 @@ public class MemberInit implements ApplicationRunner {
 
     @Transactional
     private void addUser() {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 500; i++) {
             String userid = rns.generateRandomString();
             mr.save(MemberDAO.builder()
                     .userid(userid)
@@ -86,7 +85,7 @@ public class MemberInit implements ApplicationRunner {
                         .build());
             }
         }
-        log.info("랜덤유저 50명 / 게시글 1000개 생성완료");
+        log.info("랜덤유저 / 게시글 생성완료");
     }
 
     // reply 외래키 추가 메서드
@@ -99,9 +98,7 @@ public class MemberInit implements ApplicationRunner {
             jdbc.execute(sql);
         } catch (UncategorizedSQLException e) {
             if (e.getCause() instanceof SQLException sqlException) {
-                // 다른 예외는 처리
                 if (sqlException.getErrorCode() == 1061) { // MySQL의 경우 에러 코드 1061은 중복 트리거를 나타냄
-                    // 중복 트리거가 있으므로 무시
                     System.out.println("트리거가 이미 존재합니다. 무시합니다.");
                 } else e.getCause();
             } else e.getCause();
@@ -120,12 +117,10 @@ public class MemberInit implements ApplicationRunner {
         try {
             jdbc.execute(sql);
         } catch (UncategorizedSQLException e) {
-            // 다른 예외 처리
             if (e.getCause() instanceof SQLException sqlException) {
                 // 다른 예외는 처리
                 if (sqlException.getErrorCode() == 1061) { // MySQL의 경우 에러 코드 1061은 중복 트리거를 나타냄
-                    // 중복 트리거가 있으므로 무시
-                    System.out.println("트리거가 이미 존재합니다. 무시합니다.");
+                    System.out.println("트리거가 이미 존재합니다.");
                 } else e.getCause();
             } else e.getCause();
         }

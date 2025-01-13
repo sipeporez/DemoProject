@@ -54,8 +54,7 @@ public class BoardController {
     // 게시글 쓰기 컨트롤러
     @PostMapping("/board/write")
     public ResponseEntity<?> writeBoard(@RequestBody WriteBoardDTO dto) {
-        bs.writeBoard(dto);
-        return ResponseEntity.ok("게시글 작성 완료");
+        return ResponseEntity.ok(bs.writeBoard(dto));
     }
 
     // 게시글 수정 컨트롤러

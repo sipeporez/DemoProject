@@ -1,9 +1,12 @@
 import React, { useRef } from 'react';
 import { CustomAxios } from '../CustomAxios';
 import CustomButton from '../UI/CustomButton';
+import { useRecoilValue } from 'recoil';
+import { LoginState } from '../../Recoil/LoginStateAtom';
+import CheckEnabled from '../Util/CheckEnabled';
 
 const CommentWrite = ({ boardIdx, onCommentWritten }) => {
-    const checkLogin = sessionStorage.getItem('token');
+    const login = useRecoilValue(LoginState);
     const inputData = useRef('');
 
     // Enter키 입력을 감지하는 부분
@@ -15,8 +18,9 @@ const CommentWrite = ({ boardIdx, onCommentWritten }) => {
 
     // 댓글 쓰기
     const handleWrite = async (e) => {
-        if (checkLogin) {
+        if (login) {
             if (inputData.current.value.trim() !== "") {
+                await CheckEnabled();
                 try {
                     await CustomAxios({
                         methodType: 'POST',
@@ -57,7 +61,7 @@ const CommentWrite = ({ boardIdx, onCommentWritten }) => {
                     >
                     </textarea>
                 </form>
-                <div className='flex mt-2 justify-end'>
+                <div className='flex mt-3 mb-2 justify-end'>
                     <CustomButton label={"댓글 쓰기"} onClick={handleWrite} />
                 </div>
             </div>

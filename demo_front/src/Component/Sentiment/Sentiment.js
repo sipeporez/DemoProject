@@ -57,10 +57,10 @@ const Sentiment = () => {
     return (
         <div className='flex flex-col justify-center items-center w-full'>
             <div className='flex flex-col my-4 justify-center items-center md:w-2/3 ml-0 lg:ml-32 xl:ml-48'>
-                <label className="block m-4 text-2xl font-bold text-gray-200 dark:text-white">네이버 영화 리뷰를 활용한 한국어 감성 분석</label>
+                <label className="block m-4 text-2xl font-bold text-gray-200 dark:text-white font-Pretendard">네이버 영화 리뷰를 활용한 한국어 감성 분석</label>
                 <div className="flex flex-col mb-4 text-md font-medium text-gray-200 dark:text-white">
                     <table>
-                        <tbody>
+                        <tbody className='font-Pretendard'>
                             <tr>
                                 <td>데이터 출처</td>
                                 <td>&nbsp;<a target='_blank' rel="noopener noreferrer"

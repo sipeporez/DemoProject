@@ -7,7 +7,6 @@ import com.example.demo.domain.dto.board.BoardPageDTO;
 import com.example.demo.domain.dto.board.WriteBoardDTO;
 import com.example.demo.exception.BoardNotFoundException;
 import com.example.demo.exception.MemberMismatchException;
-import com.example.demo.exception.WrongInputException;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.LikeBoardRepository;
 import com.example.demo.service.validator.board.BoardInputValidator;
@@ -39,6 +38,7 @@ public class BoardSerivce {
                 .content(dao.getContent())
                 .writtenDate(dao.getWrittenDate())
                 .likeCnt(dao.getLikeCnt())
+                .hasImage(dao.getHasImage())
                 .build();
     }
 
@@ -58,22 +58,22 @@ public class BoardSerivce {
     }
 
     // 유저 Enabled 확인
-    public boolean checkUserEnabled() {
-        return memVal.findMemberIDFromToken() != null;
-    }
-
+    public boolean checkUserEnabled() { return memVal.findMemberIDFromToken() != null; }
+    
     // 게시글 쓰기 메서드
-    public void writeBoard(WriteBoardDTO dto) {
+    public Integer writeBoard(WriteBoardDTO dto) {
         // 입력값 검증
         boardVal.boardInputValidator(dto);
         // 사용자 검증
         MemberDAO mem = memVal.findMemberIDFromToken();
 
-        br.save(BoardDAO.builder()
+        BoardDAO dao = br.save(BoardDAO.builder()
                 .member(mem)
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .build());
+
+        return dao.getIdx();
     }
 
     // 게시글 수정 메서드

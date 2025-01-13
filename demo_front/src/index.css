@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* react-quill */
+.ql-align-center {
+  @apply text-center;
+}
+
+.ql-align-right {
+  @apply text-right;
+}
+
+.ql-align-justify {
+  @apply text-justify;
+}

@@ -8,14 +8,12 @@ const CheckEnabled = async () => {
             backendURL: "checkauth",
         })
     } catch (error) {
-        if (error.response.status === 401) {
+        if (error.response.data === "이메일 인증 후 사용 가능합니다.") {
             alert(error.response.data)
             window.location.href = "/verify"
             return false;
         }
-        
     }
-
 }
 
 export default CheckEnabled

@@ -56,6 +56,13 @@ public class MemberController {
         return ResponseEntity.ok("");
     }
 
+    // OAuth2.0 최초가입 닉네임, 이름 변경
+    @PostMapping("/oauthjoin")
+    public ResponseEntity<?> oauthJoin(@RequestBody MemberDAO dao) {
+        ms.oauthJoin(dao);
+        return ResponseEntity.ok("");
+    }
+
     // 이메일 인증 - 토큰 발급
     @PostMapping("/verifyemail")
     public ResponseEntity<?> verifyEmail(@RequestBody MemberDAO dao) {

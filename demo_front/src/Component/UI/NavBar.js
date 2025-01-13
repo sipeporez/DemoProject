@@ -46,18 +46,15 @@ export default function NavBar() {
 
     const handleLogout = (e) => {
         e.preventDefault();
+        sessionStorage.clear();
         window.location.reload();
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("user");
-        sessionStorage.removeItem("CheckAdmin");
-        setLoginState(false);
     }
     const handleLogin = (e) => {
         window.location.href = '/login';
     }
 
     return (
-        <header className='sticky top-0 w-full z-50'>
+        <header className='sticky top-0 w-full z-50 font-Pretendard'>
             <nav>
                 <Disclosure as="nav" className="bg-gray-800">
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -89,7 +86,7 @@ export default function NavBar() {
                                                         classNames(
                                                             isCurrentPage(item.href) ? 'bg-gray-900 text-white' :
                                                                 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                                            'rounded-md px-3 py-2 text-sm font-medium')}>{item.name}</a>
+                                                            'rounded-md px-3 py-2 text-md font-medium no-underline')}>{item.name}</a>
                                             ) : null))
                                         }
                                     </div>

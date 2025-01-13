@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { CustomAxios } from '../CustomAxios'
 import CommentWrite from '../Form/CommentWrite'
-import LineBreak from '../Util/LineBreak'
 import CommentView from './CommentView'
 import LikeButton from './LikeButton'
 import BoardEditModal from '../Form/BoardEditModal'
 import BoardDeleteModal from '../Form/BoardDeleteModal'
+import DOMPurifying from '../Util/DOMPurifying'
+import FileDropdown from './FileDropdown'
 
 const BoardView = ({ boardIdx }) => {
 
@@ -24,7 +25,7 @@ const BoardView = ({ boardIdx }) => {
                 onResponse: handleResponse,
             });
         } catch (error) {
-            alert(error.response.data);
+            // alert(error.response.data);
         }
     }
 
@@ -51,9 +52,17 @@ const BoardView = ({ boardIdx }) => {
                         {new Date(data.writtenDate).toLocaleString()}
                     </h6>
                     <div className="min-w-screen mx-3 border-t-2 my-2 border-gray-500" />
-                    <div className="text-lg text-start mx-3 mb-3 break-words">
-                        {LineBreak(data.content)}
+                    <div className="text-lg text-start mx-3 mb-3 break-words"
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurifying(data.content)
+                        }}>
                     </div>
+                    {data.hasImage ? (
+                        <div>
+                            <FileDropdown boardIdx={boardIdx} />
+                        </div>
+                    ) : null}
+
                     <div className="flex justify-end items-end mx-3 mb-3">
                         <LikeButton boardIdx={data.idx} likeCnt={data.likeCnt}></LikeButton>
                     </div>
@@ -81,7 +90,7 @@ const BoardView = ({ boardIdx }) => {
                     </div>
                 </div>
             }
-        </div>
+        </div >
     )
 }
 

@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.demo.domain.dao.member.MemberDAO;
 import com.example.demo.service.CustomUserDetails;
+import com.example.demo.tools.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +29,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager am;
+    private final JWTUtil jwt;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -59,14 +62,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         CustomUserDetails user = (CustomUserDetails) authResult.getPrincipal();
 
-        String KEY = "rrwerkwer--werm#%$we67rmewrm33@!#kro3)(%#JTgfJ_V#VTJ$)334#mfewkmf";
-        String token = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 6000)) // 토큰 만료시간 설정
-                .withClaim("userid", user.getUsername())
-                .sign(Algorithm.HMAC256(KEY));
+        // JWT 토큰 생성
+        String token = jwt.getJWT(user.getUsername());
 
-
-        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        response.addHeader(HttpHeaders.AUTHORIZATION, token);
         response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(user.getNickname());

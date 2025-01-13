@@ -2,10 +2,11 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CustomAxios } from '../CustomAxios'
-import useLoginCheck from '../Hooks/useLoginCheck'
 import CustomButton from '../UI/CustomButton'
 import Spinner from '../UI/Spinner'
 import CloudFlareTurnstile from './CloudFlareTurnstile'
+import LocalStorageExpiration from './LocalStorageExpiration'
+import axios from 'axios'
 
 const VerifyEmail = () => {
 
@@ -44,11 +45,13 @@ const VerifyEmail = () => {
         }
     }
 
-    useLoginCheck();
-
     useEffect(() => {
         checkVerifiy();
         if (key) {
+            const url = new URL(window.location.href); // 현재 URL을 가져옴
+            url.search = ''; // 쿼리 파라미터를 빈 문자열로 설정하여 제거 
+            window.history.replaceState({}, '', url.toString()); // 새 URL로 변경
+
             handleKey();
             // 2초 후에 /home으로 리디렉션
             const timer = setTimeout(() => {
@@ -59,23 +62,31 @@ const VerifyEmail = () => {
         }
     }, [key])
 
-
+    // 이메일 링크 클릭시 인증 키 검증
     const handleKey = async () => {
         setLoading(true);
         if (key.trim() !== '') {
             try {
-                CustomAxios({
-                    methodType: "POST",
-                    backendURL: "verifykey",
-                    fetchData: { "token": key },
-                    onResponse: () => {
-                        setLoading(false);
-                        setVerified(true);
-                    }
-                })
+                // 이메일로 받은 토큰
+                const data = { "token": key };
+                // 로컬 스토리지에 저장한 임시 로그인 상태 토큰 -> 헤더에 추가
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': LocalStorageExpiration("GET", "token")
+                };
+                let resp = await axios.post(process.env.REACT_APP_SPRING_SERVER + "verifykey", data, { headers });
+                if (resp) {
+                    localStorage.removeItem("token");
+                    setLoading(false);
+                    setVerified(true);
+                }
             } catch (error) {
                 setLoading(false);
-                alert(error.response.data)
+                console.log(error)
+                if (error.response.data === "이메일 인증 후 사용 가능합니다.") {
+                    alert("이메일 인증에 실패하였습니다. 다시 시도 해주세요.")
+                }
+                else alert(error.response.data);
             }
         }
     }
@@ -116,9 +127,12 @@ const VerifyEmail = () => {
                                 backendURL: "verifyemail",
                                 fetchData: { "email": email },
                                 onResponse: (resp) => {
+                                    // 이메일 전송 성공시 localstorage에 5분짜리 토큰 저장
+                                    LocalStorageExpiration("SET", "token", sessionStorage.getItem("token"), 5);
                                     setLoading(false)
                                     setSend(true)
-                                    alert("인증용 이메일을 전송했습니다. 이메일을 확인 해주세요.")
+                                    alert("인증용 이메일을 전송했습니다. 5분 이내에 이메일을 확인 해주세요.")
+                                    window.location.href = "/home";
                                 }
                             })
                         } catch (error) {
@@ -128,7 +142,7 @@ const VerifyEmail = () => {
                     }
                     else {
                         setLoading(false)
-                        alert("Turnstile 인증에 실패했습니다. 다시 시도해주세요.");
+                        alert("Turnstile 인증에 실패했습니다. 새로고침 후 다시 시도 해주세요.");
                     }
                 }
             })
