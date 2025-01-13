@@ -24,7 +24,7 @@ public class FileListDTO {
 
     public FileListDTO(String originalName, String fileExtension) {
         this.originalName = originalName;
-        this. fileExtension = fileExtension;
+        this.fileExtension = fileExtension;
     }
 
 }

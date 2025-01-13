@@ -29,10 +29,11 @@ public interface FileRepository extends JpaRepository<FileDAO, Integer> {
     int updateBoardIdxByStoredName(@Param("boardIdx") Integer boardIdx, @Param("storedName") String storedName);
 
     // 하드 딜리트를 위한 파일 리스트 가져오기
-    @Query(value = "SELECT stored_name FROM file_db " +
+    @Query(value = "SELECT stored_name, file_extension " +
+            "FROM file_db " +
             "WHERE board_idx IS NULL " +
             "AND upload_date < NOW() - INTERVAL 1 DAY;", nativeQuery = true)
-    List<String> getTempFileStoredName();
+    List<Object[]> getTempFileStoredName();
 
     // DB에서 boardIdx가 null인 값들 삭제
     @Modifying

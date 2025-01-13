@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableScheduling
 public class FileService {
     private final FileRepository fr;
     private final BoardRepository br;
@@ -69,14 +71,28 @@ public class FileService {
     @Scheduled(fixedRate = 3600000)
     @Transactional
     public void removeTempFiles() {
-        List<String> storedFileName = fr.getTempFileStoredName();
-        for (String name : storedFileName) {
-            File file = new File(filePath + name);
+        List<Object[]> list = fr.getTempFileStoredName();
+        for (Object[] row : list) {
+            String storedName = (String) row[0];
+            String fileExtension = (String) row[1];
+            File file = new File(filePath
+                    + storedName.replace("_comp", "")
+                    + "." + fileExtension);
             if (file.exists()) {
                 try {
                     Files.delete(file.toPath());  // 파일 삭제
-                    log.info("Deleted file: {}{}", filePath, name);
+                    log.info("Deleted file: {}{}", filePath, storedName);
                     fr.removeTempFileList();
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+            }
+            File compFile = new File(compressFilePath
+                    + storedName + ".webp");
+            if (compFile.exists()) {
+                try {
+                    Files.delete(compFile.toPath());  // 파일 삭제
+                    log.info("Deleted Comp file: {}{}", compressFilePath, storedName);
                 } catch (IOException e) {
                     log.error(e.getMessage());
                 }
