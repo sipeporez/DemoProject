@@ -7,6 +7,7 @@ const FileDropdown = ({ boardIdx }) => {
     const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
+        setIsOpen(false);
         handleFileList();
     }, [boardIdx])
 
@@ -59,7 +60,7 @@ const FileDropdown = ({ boardIdx }) => {
                             onClick={() => { makeDownloadLink(item.storedName) }}
                             className="flex justify-between items-center px-3 py-2 rounded-md text-xs text-gray-700 
                             hover:bg-gray-100 hover:text-gray-900 hover:outline-none hover:cursor-pointer">
-                            <div>{item.originalName.length > 15 ?
+                            <div>{item.originalName.length > 20 ?
                                 item.originalName.slice(0, 14) + "..." + item.originalName.slice(item.originalName.length - 10, item.originalName.length)
                                 : item.originalName}
                             </div>

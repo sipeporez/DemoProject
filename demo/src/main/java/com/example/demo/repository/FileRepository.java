@@ -10,23 +10,17 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FileRepository extends JpaRepository<FileDAO, Integer> {
-
-    @Query("SELECT new com.example.demo.domain.dto.board.FileListDTO " +
-            "(f.originalName, f.storedName, f.fileSize, f.fileStatus) " +
-            "FROM FileDAO f " +
-            "WHERE f.boardIdx = :boardIdx")
-    List<FileListDTO> getFileListByBoardIdx(@Param("boardIdx") Integer boardIdx);
-
+    
     @Query("SELECT new com.example.demo.domain.dto.board.FileListDTO " +
             "(f.originalName, f.storedName, f.fileSize, f.fileExtension, f.fileStatus) " +
             "FROM FileDAO f " +
             "WHERE f.boardIdx = :boardIdx")
-    List<FileListDTO> getFileListDetailByBoardIdx(@Param("boardIdx") Integer boardIdx);
+    List<FileListDTO> getFileListByBoardIdx(@Param("boardIdx") Integer boardIdx);
 
-    @Query("SELECT f.originalName " +
+    @Query("SELECT new com.example.demo.domain.dto.board.FileListDTO (f.originalName, f.fileExtension) " +
             "FROM FileDAO f " +
             "WHERE f.storedName = :storedName")
-    String getOriginalNameByStoredName(@Param("storedName") String storedName);
+    FileListDTO getOriginalNameWithExtensionByStoredName(@Param("storedName") String storedName);
 
     @Modifying
     @Query("UPDATE FileDAO f " +

@@ -22,12 +22,9 @@ public class FileListDTO {
     private String fileExtension;
     private FileStatus fileStatus;
 
-    // getFileListByBoardIdx JPA용 생성자 -> Lombok으로 생성 안되는데, 왜 이런지 모르겠음
-    public FileListDTO(String originalName, String storedName, Long fileSize, FileStatus fileStatus) {
+    public FileListDTO(String originalName, String fileExtension) {
         this.originalName = originalName;
-        this.storedName = storedName;
-        this.fileSize = fileSize;
-        this.fileStatus = fileStatus;
+        this. fileExtension = fileExtension;
     }
 
 }

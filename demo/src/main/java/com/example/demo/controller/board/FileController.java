@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @RestController
@@ -28,20 +27,21 @@ public class FileController {
     @GetMapping("/board/image/{filename}")
     public ResponseEntity<?> showBoardImage(@PathVariable("filename") String fileName,
                                             @RequestParam(value = "d", required = false) String download)
-            throws FileNotFoundException, IOException {
+            throws IOException {
 
-        var fileWithName = fs.downloadBoardFile(fileName);
+        var fileWithName = fs.downloadBoardFile(fileName, download);
 
+        // record 데이터 분리
         FileSystemResource file = fileWithName.file();
         String originalName = fileWithName.originalName();
         String mimeType = fileWithName.mimeType();
 
         // 쿼리 파라미터가 있으면 attachment / 없으면 inline
-        String headerValue = (download != null && download.equals("true")) ? "attachment" : "inline";
+        String headerValue = (download != null && download.equals("true")) ? "attachment; " : "inline; ";
 
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf(mimeType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue + "; filename=\"" + originalName + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue + "filename=\"" + originalName + "\"")
                 .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600") // 1시간 동안 캐시
                 .header(HttpHeaders.ETAG, String.valueOf(file.hashCode())) // ETag를 파일의 해시값으로 설정
                 .header(HttpHeaders.LAST_MODIFIED, String.valueOf(file.lastModified())) // 마지막 수정 시간

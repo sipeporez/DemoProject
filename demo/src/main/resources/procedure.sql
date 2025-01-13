@@ -70,12 +70,14 @@ BEGIN
 		INSERT INTO removed_comment (idx, comment_id, content, written_date, board_idx, userid)
 	    SELECT idx, comment_id, content, written_date, board_idx, userid 
 	    FROM board_comment
-	    WHERE board_comment.board_idx = idx;
+	    WHERE board_comment.board_idx = idx
+	        AND board_comment.deleted != 1;
 -- 대댓글 옮기기
 		INSERT INTO removed_reply (idx, comment_id, content, written_date, board_idx, userid, removed_date)
       SELECT idx, comment_id, content, written_date, board_idx, userid, current_timestamp(6)
       FROM board_comment_reply
-      WHERE board_comment_reply.board_idx = idx;
+      WHERE board_comment_reply.board_idx = idx
+        AND board_comment_reply.deleted != 1;
 -- 삽입작업 끝난 뒤 Commit하여 데이터 보존
 		COMMIT;
 		

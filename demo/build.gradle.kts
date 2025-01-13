@@ -24,6 +24,8 @@ repositories {
 }
 
 dependencies {
+	implementation("com.sksamuel.scrimage:scrimage-core:4.3.0")
+	implementation("com.sksamuel.scrimage:scrimage-webp:4.3.0")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
