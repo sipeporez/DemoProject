@@ -19,5 +19,6 @@ public class BoardDTO {
     private Long likeCnt;
     private Boolean edited;
     private Boolean hasImage;
+    private Integer commentCount;
 
 }

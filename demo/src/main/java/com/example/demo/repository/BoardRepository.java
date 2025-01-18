@@ -23,13 +23,13 @@ public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
 
     // 게시글 페이지네이션
     // 생성자를 사용하여 직렬화된 PageDTO 페이지 반환
-    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage) "
+    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage, b.commentCount) "
             +"FROM BoardDAO b JOIN b.member m")
     Page<BoardPageDTO> getBoards(Pageable pageable);
 
     // 게시글 검색 페이지네이션
     // 생성자를 사용하여 직렬화된 PageDTO 페이지 반환
-    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage) "
+    @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage, b.commentCount) "
             +"FROM BoardDAO b JOIN b.member m "
             + "WHERE (:type = 'title' AND b.title LIKE %:key%) "
             + "OR (:type = 'content' AND b.content LIKE %:key%) "

@@ -10,7 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -32,10 +32,13 @@ public class OAuth2Handler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwt;
     private final RandomStringGenerator rnd;
 
+    @Value("${front.addr}")
+    private String FRONT_ADDR;
+
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
         String username = OAuthUsernameCreator.getUsernameFromOAuth(user);
         String email = user.getAttribute("email");
@@ -51,7 +54,7 @@ public class OAuth2Handler extends SimpleUrlAuthenticationSuccessHandler {
         // 이메일로 member 검사 후 이미 등록된 이메일이라면 jwt 생성
         Optional<MemberDAO> mem = mr.findByEmail(email);
         if (mem.isPresent() && !mem.get().getName().equals("OAuth2-Temp")) {
-            response.sendRedirect("http://localhost:3000/checkOAuth?name=" +
+            response.sendRedirect(FRONT_ADDR + "checkOAuth?name=" +
                     URLEncoder.encode(mem.get().getNickname(), StandardCharsets.UTF_8) +
                     "&key=" + jwt.getJWT(mem.get().getUserid()));
         }
@@ -65,7 +68,8 @@ public class OAuth2Handler extends SimpleUrlAuthenticationSuccessHandler {
                     .userpw(enc.encode("OAuth2-Temp"))
                     .enabled(true)
                     .build());
-            response.sendRedirect("http://localhost:3000/checkOAuth?needChange=y&key=" + jwt.getJWT(username.substring(0, 15)));
+            response.sendRedirect(FRONT_ADDR + "checkOAuth?needChange=y&key="
+                    + jwt.getJWT(username.substring(0, 15)));
         }
     }
 }

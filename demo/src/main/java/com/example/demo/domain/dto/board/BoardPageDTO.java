@@ -16,4 +16,5 @@ public class BoardPageDTO {
     private LocalDateTime writtenDate;
     private Long likeCnt;
     private Boolean hasImage;
+    private Integer commentCount;
 }

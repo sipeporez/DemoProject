@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MemberInit implements ApplicationRunner {
+public class ServerInit implements ApplicationRunner {
     private final MemberRepository mr;
     private final BoardRepository br;
     private final CommentRepository cr;
@@ -52,9 +52,7 @@ public class MemberInit implements ApplicationRunner {
                 .role(Role.ROLE_ADMIN)
                 .build());
 
-        log.info("admin 회원가입 완료");
-        log.info("id : " + ADMIN_ID);
-        log.info("pw : " + ADMIN_PASSWORD);
+        log.info("admin 회원가입 완료 (" + ADMIN_ID + " | " + ADMIN_PASSWORD + ")");
     }
 
     @Transactional
@@ -90,7 +88,7 @@ public class MemberInit implements ApplicationRunner {
 
     // reply 외래키 추가 메서드
     private void addForeignKey() {
-        try{
+        try {
             String sql = "ALTER TABLE board_comment_reply " +
                     "ADD CONSTRAINT fk_comment_id_for_reply " +
                     "FOREIGN KEY (comment_id) REFERENCES board_comment(comment_id) " +
@@ -151,9 +149,42 @@ public class MemberInit implements ApplicationRunner {
         log.info("프로시저 생성 완료");
     }
 
+    // trigger.sql 실행
+    public void boardCommentCountTrigger() throws IOException {
+        String sql = "CREATE TRIGGER update_comment_count_comment " +
+                "AFTER INSERT ON test.board_comment " +
+                "FOR EACH ROW " +
+                "BEGIN " +
+                "UPDATE test.board " +
+                "SET comment_count = comment_count + 1 " +
+                "WHERE idx = NEW.board_idx;" +
+                "END;";
+        String sql2 = "CREATE TRIGGER update_comment_count_reply " +
+                "AFTER INSERT ON test.board_comment_reply " +
+                "FOR EACH ROW " +
+                "BEGIN " +
+                "UPDATE test.board " +
+                "SET comment_count = comment_count + 1 " +
+                "WHERE idx = NEW.board_idx;" +
+                "END;";
+        try {
+            jdbc.execute(sql);
+            jdbc.execute(sql2);
+        } catch (UncategorizedSQLException e) {
+            if (e.getCause() instanceof SQLException sqlException) {
+                // 다른 예외는 처리
+                if (sqlException.getErrorCode() == 1061) { // MySQL의 경우 에러 코드 1061은 중복 트리거를 나타냄
+                    System.out.println("트리거가 이미 존재합니다.");
+                } else e.getCause();
+            } else e.getCause();
+        }
+        log.info("댓글 카운트 트리거 생성 완료");
+    }
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         addCommentTrigger();
+        boardCommentCountTrigger();
         addForeignKey();
         createMySQLProcedure();
         addAdmin();

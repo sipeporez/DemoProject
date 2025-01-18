@@ -23,7 +23,7 @@ public class MemberValidator {
         if (authen != null && authen.isAuthenticated()) {
             // 사용자가 DB에 있는지 검사
             mem = mr.findById(authen.getName())
-                    .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new MemberNotFoundException("회원 정보를 찾을 수 없습니다."));
             // 사용자 이메일 인증 여부 검사
             if (mem.getEnabled()) return mem;
             throw new MemberNotAuthorizationException("이메일 인증 후 사용 가능합니다.");

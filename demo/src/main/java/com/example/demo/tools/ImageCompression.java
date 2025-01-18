@@ -2,10 +2,6 @@ package com.example.demo.tools;
 
 import com.example.demo.exception.FileUploadException;
 import com.sksamuel.scrimage.ImmutableImage;
-import com.sksamuel.scrimage.nio.AnimatedGif;
-import com.sksamuel.scrimage.nio.AnimatedGifReader;
-import com.sksamuel.scrimage.nio.ImageSource;
-import com.sksamuel.scrimage.webp.Gif2WebpWriter;
 import com.sksamuel.scrimage.webp.WebpWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -30,7 +30,6 @@ public class BoardSerivce {
     public BoardDTO getBoardOnce(Integer idx) {
         BoardDAO dao = br.findBoardByIdWithMember(idx)
                 .orElseThrow(() -> new BoardNotFoundException("게시글을 찾을 수 없습니다."));
-
         return BoardDTO.builder()
                 .idx(dao.getIdx())
                 .nickname(dao.getMember().getNickname())
@@ -39,6 +38,7 @@ public class BoardSerivce {
                 .writtenDate(dao.getWrittenDate())
                 .likeCnt(dao.getLikeCnt())
                 .hasImage(dao.getHasImage())
+                .commentCount(dao.getCommentCount())
                 .build();
     }
 

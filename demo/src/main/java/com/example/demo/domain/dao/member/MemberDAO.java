@@ -4,6 +4,9 @@ package com.example.demo.domain.dao.member;
 import com.example.demo.domain.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -37,4 +40,7 @@ public class MemberDAO {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Role role = Role.ROLE_USER;
+
+    @CreationTimestamp
+    private LocalDateTime regiDate;
 }

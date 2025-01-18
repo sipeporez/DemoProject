@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.config.filter.JWTAuthenticationFilter;
 import com.example.demo.config.filter.JWTAuthorizationFilter;
+import com.example.demo.repository.LogRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.tools.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class SecurityConfig {
     private final AuthenticationConfiguration ac;
     private final MemberRepository mr;
+    private final LogRepository lr;
     private final JWTUtil jwt;
     private final OAuth2Handler oAuth2Handler;
 
@@ -38,7 +40,7 @@ public class SecurityConfig {
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(new JWTAuthorizationFilter(mr, jwt), AuthorizationFilter.class);
-        http.addFilter(new JWTAuthenticationFilter(ac.getAuthenticationManager(), jwt));
+        http.addFilter(new JWTAuthenticationFilter(ac.getAuthenticationManager(), jwt, mr, lr));
 
         http.oauth2Login(oauth -> oauth.successHandler(oAuth2Handler));
 

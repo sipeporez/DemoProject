@@ -120,8 +120,9 @@ public class FileService {
         // 압축 파일 여부 확인
         boolean isCompressed = fileName.endsWith("_comp.webp");
         // 다운로드 요청인 경우 - 항상 원본 파일 제공
+        // 로그인 확인
         if ("true".equals(download) && isCompressed) {
-            return getOriginalFile(fileName);
+           return getOriginalFile(fileName);
         }
         // 압축 파일 요청인 경우
         if (isCompressed) {

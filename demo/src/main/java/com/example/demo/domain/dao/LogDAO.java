@@ -27,8 +27,9 @@ public class LogDAO {
     foreignKey = @ForeignKey(name="fk_userid_for_log"))
     private MemberDAO member;
 
-    @CreationTimestamp
-    private LocalDateTime regidate;
+    @Column
+    private String ipAddress;
 
-    private LocalDateTime logindate;
+    @CreationTimestamp
+    private LocalDateTime loginDate;
 }

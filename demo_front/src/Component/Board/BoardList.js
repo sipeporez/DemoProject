@@ -104,7 +104,7 @@ const BoardList = () => {
         window.scrollTo(0, 0)
     }
     return (
-        <div className='ml-0 lg:ml-32 xl:ml-48'>
+        <div className='ml-0 lg:ml-32 xl:ml-48 font-Pretendard'>
             {boardIdx &&
                 <BoardView boardIdx={boardIdx} />}
             <div className="flex justify-center pt-5">
@@ -136,13 +136,19 @@ const BoardList = () => {
                                         {item.title.length > 25 ?
                                             (<div className='flex'>
                                                 {item.title.slice(0, 25) + '...'}
-                                                {item.hasImage && <PhotoIcon className='w-4 ml-2 mt-[1px]' />}
+                                                {item.hasImage && <PhotoIcon className='w-4 mt-[1px]' />}
+                                                <div className='justify-center items-center flex ml-3 text-gray-500'>
+                                                    {item.commentCount !== 0 ? '  [' + item.commentCount + ']' : null}
+                                                </div>
                                             </div>
                                             )
                                             : (
                                                 <div className='flex'>
                                                     {item.title}
                                                     {item.hasImage && <PhotoIcon className='w-4 ml-2 mt-[1px]' />}
+                                                    <div className='justify-center items-center flex ml-3 text-gray-500'>
+                                                        {item.commentCount !== 0 ? '  [' + item.commentCount + ']' : null}
+                                                    </div>
                                                 </div>
                                             )}
                                     </td>

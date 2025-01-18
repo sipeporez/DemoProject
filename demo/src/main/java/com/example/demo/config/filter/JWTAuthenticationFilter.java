@@ -3,7 +3,10 @@ package com.example.demo.config.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.demo.domain.dao.LogDAO;
 import com.example.demo.domain.dao.member.MemberDAO;
+import com.example.demo.repository.LogRepository;
+import com.example.demo.repository.MemberRepository;
 import com.example.demo.service.CustomUserDetails;
 import com.example.demo.tools.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +33,8 @@ import java.util.Date;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager am;
     private final JWTUtil jwt;
+    private final MemberRepository mr;
+    private final LogRepository lr;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -65,10 +70,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // JWT 토큰 생성
         String token = jwt.getJWT(user.getUsername());
 
+        // 로그인 로그 생성
+        saveLoginLog(user, request.getRemoteAddr());
+
         response.addHeader(HttpHeaders.AUTHORIZATION, token);
         response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(user.getNickname());
     }
 
+
+    public void saveLoginLog(CustomUserDetails user, String addr) {
+        lr.save(LogDAO.builder()
+                .member(mr.findById(user.getUsername()).orElseThrow())
+                .ipAddress(addr)
+                .build());
+    }
 }
