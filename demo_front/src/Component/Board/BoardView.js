@@ -51,9 +51,9 @@ const BoardView = ({ boardIdx }) => {
                     <div className='flex justify-between h-fit'>
                         <div className='flex items-center'>
                             <div className='text-gray-600 text-left mx-3 text-sm'>
-                                조회수 &nbsp;
+                                조회수 &nbsp; {data.viewCnt}
                             </div>
-                            <div className="border border-black opacity-20 mx-2 h-3.5" />
+                            <div className="border border-black opacity-20 h-3.5" />
                             <div className='text-gray-600 text-left mx-3 text-sm'>
                                 댓글 &nbsp; {data.commentCount}
                             </div>

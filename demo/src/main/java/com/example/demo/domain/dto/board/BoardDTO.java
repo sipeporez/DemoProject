@@ -16,6 +16,7 @@ public class BoardDTO {
     private String title;
     private String content;
     private LocalDateTime writtenDate;
+    private Long viewCnt;
     private Long likeCnt;
     private Boolean edited;
     private Boolean hasImage;

@@ -27,15 +27,21 @@ public class BoardSerivce {
 
     // 게시글 조회 메서드
     // fetch join 사용
+    @Transactional
     public BoardDTO getBoardOnce(Integer idx) {
+        // 조회수 증가
+        br.increaseViewCntByBoardIdx(idx);
+        // 게시글 가져오기
         BoardDAO dao = br.findBoardByIdWithMember(idx)
                 .orElseThrow(() -> new BoardNotFoundException("게시글을 찾을 수 없습니다."));
+
         return BoardDTO.builder()
                 .idx(dao.getIdx())
                 .nickname(dao.getMember().getNickname())
                 .title(dao.getTitle())
                 .content(dao.getContent())
                 .writtenDate(dao.getWrittenDate())
+                .viewCnt(dao.getViewCnt())
                 .likeCnt(dao.getLikeCnt())
                 .hasImage(dao.getHasImage())
                 .commentCount(dao.getCommentCount())

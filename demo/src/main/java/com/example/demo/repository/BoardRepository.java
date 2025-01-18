@@ -21,6 +21,11 @@ public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
     @Query("SELECT b FROM BoardDAO b JOIN FETCH b.member WHERE b.idx = :idx")
     Optional<BoardDAO> findBoardByIdWithMember(@Param("idx") Integer idx);
 
+    // 게시글 조회수 증가 메서드
+    @Modifying
+    @Query("UPDATE BoardDAO b SET b.viewCnt = b.viewCnt + 1 WHERE b.idx = :boardIdx")
+    void increaseViewCntByBoardIdx(@Param("boardIdx") Integer boardIdx);
+
     // 게시글 페이지네이션
     // 생성자를 사용하여 직렬화된 PageDTO 페이지 반환
     @Query("SELECT new com.example.demo.domain.dto.board.BoardPageDTO(b.idx, m.nickname, b.title, b.writtenDate, b.likeCnt, b.hasImage, b.commentCount) "

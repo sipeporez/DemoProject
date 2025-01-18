@@ -38,6 +38,10 @@ public class BoardDAO {
     @CreationTimestamp
     private LocalDateTime writtenDate;
 
+    @Column
+    @Builder.Default
+    private Long viewCnt = 0L;
+
     @Column(name = "like_cnt", nullable = false)
     @Builder.Default
     private Long likeCnt = 0L;
