@@ -48,20 +48,18 @@ const BoardView = ({ boardIdx }) => {
                     <div className="text-right mx-3 font-semibold">
                         {data.nickname}
                     </div>
-                    <div className='flex justify-between h-fit'>
-                        <div className='flex items-center'>
-                            <div className='text-gray-600 text-left mx-3 text-sm'>
-                                조회수 &nbsp; {data.viewCnt}
+                    <div className='flex justify-between items-center text-sm mx-3 text-gray-600'>
+                        <div className='flex text-left items-center'>
+                            <div className='flex'>
+                                조회수 <div className='ml-2'>{data.viewCnt}</div>
                             </div>
-                            <div className="border border-black opacity-20 h-3.5" />
-                            <div className='text-gray-600 text-left mx-3 text-sm'>
-                                댓글 &nbsp; {data.commentCount}
+                            <div className="border border-black opacity-20 h-3.5 mx-3" />
+                            <div className='flex'>
+                                댓글 <div className='ml-2'>{data.commentCount}</div>
                             </div>
                         </div>
-                        <div className='flex items-center'>
-                            <div className="text-gray-600 text-right mx-3 text-sm">
-                                {new Date(data.writtenDate).toLocaleString()}
-                            </div>
+                        <div className='flex text-right items-center'>
+                            {new Date(data.writtenDate).toLocaleString()}
                         </div>
                     </div>
                     <div className="min-w-screen mx-3 border-t-2 my-2 border-gray-500" />
@@ -83,7 +81,7 @@ const BoardView = ({ boardIdx }) => {
                         <div className='flex justify-end mx-2 gap-2'>
                             <BoardEditModal
                                 title={data.title}
-                                content={data.content}
+                                data={data.content}
                                 boardIdx={boardIdx} />
                             <BoardDeleteModal
                                 boardIdx={boardIdx}

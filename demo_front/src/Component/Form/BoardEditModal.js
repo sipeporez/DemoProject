@@ -7,8 +7,11 @@ import { CustomAxios } from '../CustomAxios';
 import CustomButton from '../UI/CustomButton';
 import { useRecoilValue } from 'recoil';
 import { LoginState } from '../../Recoil/LoginStateAtom';
+import Quill from './Quill';
 
-const BoardEditModal = ({ boardIdx, title, content }) => {
+const BoardEditModal = ({ boardIdx, title, data }) => {
+    const [content, setContent] = useState('');
+
     const style = {
         position: 'absolute',
         top: '50%',
@@ -42,15 +45,16 @@ const BoardEditModal = ({ boardIdx, title, content }) => {
     const inputContent = useRef('');
 
     const handleEdit = async () => {
+        console.log(content);
         if (inputTitle.current.value.trim() !== "" &&
-            inputContent.current.value.trim() !== "") {
+            content.trim() !== "") {
             try {
                 await CustomAxios({
                     methodType: "PUT",
                     backendURL: `board/edit/${boardIdx}`,
                     fetchData: {
                         title: inputTitle.current.value,
-                        content: inputContent.current.value
+                        content: content
                     },
                     onResponse: (resp) => {
                         alert(resp); // 게시글 작성 완료 alert
@@ -101,6 +105,9 @@ const BoardEditModal = ({ boardIdx, title, content }) => {
                                     maxLength={100}></textarea>
                             </div>
                             <div className="relative z-0 w-full mb-3 group">
+                                <div className='w-full min-h-[50vh]'><Quill input={setContent} currentValue={data} /></div>
+                            </div>
+                            {/* <div className="relative z-0 w-full mb-3 group">
                                 <textarea
                                     ref={inputContent}
                                     rows="10"
@@ -108,7 +115,7 @@ const BoardEditModal = ({ boardIdx, title, content }) => {
                                     placeholder="글 내용"
                                     defaultValue={content}
                                     maxLength={5000}></textarea>
-                            </div>
+                            </div> */}
                             <div className='float-right'>
                                 <CustomButton label={"글 수정"} onClick={handleEdit} />
                             </div>

@@ -133,24 +133,14 @@ const BoardList = () => {
                                     onClick={() => handleBoardIdx(item.idx)}
                                     className='hover:bg-opacity-10 hover:bg-black duration-150 border-b-2 transition-colors break-all text-sm md:text-md'>
                                     <td className='text-start w-[30%] md:w-[50%] py-2 pl-2'>
-                                        {item.title.length > 25 ?
-                                            (<div className='flex'>
-                                                {item.title.slice(0, 25) + '...'}
-                                                {item.hasImage && <PhotoIcon className='w-4 mt-[1px]' />}
-                                                <div className='justify-center items-center flex ml-3 text-gray-500'>
-                                                    {item.commentCount !== 0 ? '  [' + item.commentCount + ']' : null}
-                                                </div>
+                                        <div className='flex'>
+                                            {item.title.length > 25 ? item.title.slice(0, 25) + '...' : item.title}
+                                            {item.hasImage && <PhotoIcon className='min-w-4 w-4 ml-2 mt-[1px]' />}
+                                            <div className='justify-center items-center flex ml-3 text-gray-500'>
+                                                {item.commentCount !== 0 && ` [${item.commentCount}]`}
                                             </div>
-                                            )
-                                            : (
-                                                <div className='flex'>
-                                                    {item.title}
-                                                    {item.hasImage && <PhotoIcon className='w-4 ml-2 mt-[1px]' />}
-                                                    <div className='justify-center items-center flex ml-3 text-gray-500'>
-                                                        {item.commentCount !== 0 ? '  [' + item.commentCount + ']' : null}
-                                                    </div>
-                                                </div>
-                                            )}
+                                        </div>
+
                                     </td>
                                     <td className='text-center w-fit md:w-[30%] py-2'>{item.nickname.length > 10 ? item.nickname.slice(0, 10) + '...' : item.nickname}</td>
                                     <td className='text-center w-fit md:w-[10%] py-2'>{<TimeCalc time={item.writtenDate} />}</td>

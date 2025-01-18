@@ -136,13 +136,8 @@ const BoardWriteModal = () => {
                                     maxLength={100}></textarea>
                             </div>
                             <div className="relative z-0 w-full mb-3 group">
-                                {/* <textarea
-                                    ref={inputContent}
-                                    rows="10"
-                                    className="block resize-y min-h-20 max-h-[70vh] p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="글 내용"
-                                    maxLength={5000}></textarea> */}
-                                <div className='w-full min-h-[50vh]'><Quill input={setContent} /></div>                            </div>
+                                <div className='w-full min-h-[50vh]'><Quill input={setContent} /></div>
+                            </div>
                             <div className='float-right'>
                                 <CustomButton label={"글 등록"} onClick={handleWrite} />
                             </div>
