@@ -1,8 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.domain.Role;
 import com.example.demo.domain.dao.board.BoardDAO;
-import com.example.demo.domain.dto.board.BoardDTO;
 import com.example.demo.domain.dto.board.BoardPageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
@@ -45,9 +44,13 @@ public interface BoardRepository extends JpaRepository<BoardDAO, Integer> {
     @Procedure(name = "RemoveBoard")
     void removeBoard(@Param("idx") Integer idx);
 
-    // 마지막 게시글 번호 가져오기
-    @Query(nativeQuery = true, value = "SELECT idx FROM board LIMIT 1")
-    Integer findBoardLastIdx();
+    // 무한 스크롤용 최초 idx 30개 가져오기
+    @Query(nativeQuery = true, value = "SELECT idx FROM board ORDER BY idx DESC LIMIT 30;")
+    List<Integer> findBoardLastIdx();
+
+    // 무한 스크롤용 전달받은 idx 부터 30개 가져오기
+    @Query(nativeQuery = true, value = "SELECT idx FROM board WHERE idx < :boardIdx ORDER BY idx DESC LIMIT 30;")
+    List<Integer> findBoardLastIdx(@Param("boardIdx") Integer idx);
 
     // 이미지가 업로드 된 경우 hasImage 갱신
     @Modifying

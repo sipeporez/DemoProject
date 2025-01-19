@@ -47,7 +47,8 @@ public class BoardDAO {
     private Long likeCnt = 0L;
 
     @Column
-    private Integer commentCount;
+    @Builder.Default
+    private Integer commentCount = 0;
 
     @Builder.Default
     private Boolean edited = false;

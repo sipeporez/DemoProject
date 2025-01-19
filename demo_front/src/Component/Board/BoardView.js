@@ -7,9 +7,12 @@ import BoardEditModal from '../Form/BoardEditModal'
 import BoardDeleteModal from '../Form/BoardDeleteModal'
 import DOMPurifying from '../Util/DOMPurifying'
 import FileDropdown from './FileDropdown'
+import { LoginState } from '../../Recoil/LoginStateAtom'
+import { useRecoilValue } from 'recoil'
 
 const BoardView = ({ boardIdx }) => {
 
+    const checkLogin = useRecoilValue(LoginState);
     const [data, setData] = useState('');
     const [commentState, setcommentState] = useState(0);
 
@@ -74,11 +77,11 @@ const BoardView = ({ boardIdx }) => {
                         </div>
                     ) : null}
 
-                    <div className="flex justify-end items-end mx-3 mb-3">
+                    <div className="flex justify-end items-end mx-2 mb-3">
                         <LikeButton boardIdx={data.idx} likeCnt={data.likeCnt}></LikeButton>
                     </div>
                     {data.nickname === sessionStorage.getItem("user") || sessionStorage.getItem("CheckAdmin") === 'X' ?
-                        <div className='flex justify-end mx-2 gap-2'>
+                        <div className='flex justify-end mx-3 gap-2'>
                             <BoardEditModal
                                 title={data.title}
                                 data={data.content}
@@ -94,10 +97,10 @@ const BoardView = ({ boardIdx }) => {
                             boardIdx={boardIdx}
                             commentState={commentState}
                             onCommentWritten={handleCommentState} />
-                        <CommentWrite
+                        {checkLogin && checkLogin ? <CommentWrite
                             boardIdx={boardIdx}
                             commentState={commentState}
-                            onCommentWritten={handleCommentState} />
+                            onCommentWritten={handleCommentState} /> : null}
                     </div>
                 </div>
             }

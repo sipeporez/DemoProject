@@ -9,6 +9,7 @@ import { CustomAxios } from '../CustomAxios';
 import CustomButton from '../UI/CustomButton';
 import CheckEnabled from '../Util/CheckEnabled';
 import Quill from './Quill';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 
 const BoardWriteModal = () => {
@@ -48,6 +49,7 @@ const BoardWriteModal = () => {
 
     // fileList 관리용 이미지 경로 추출
     const extractImageName = (e) => {
+        // 정규식 생성, g는 global(모든 텍스트 검사)
         const regex = new RegExp(`<img src="${URL}([^"]+)">`, 'g');
         const matches = [...e.matchAll(regex)];
         // 매칭된 결과에서 파일 이름만 추출
@@ -111,7 +113,6 @@ const BoardWriteModal = () => {
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={open}
-                onClose={handleClose}
                 closeAfterTransition
                 slots={{ backdrop: Backdrop }}
                 slotProps={{
@@ -119,10 +120,10 @@ const BoardWriteModal = () => {
                         timeout: 500,
                     },
                 }}
-                className='ml-0 lg:ml-32 xl:ml-48'
-            >
+                className='ml-0 lg:ml-32 xl:ml-48'>
                 <Fade in={open}>
                     <Box sx={style}>
+                        <div onClick={handleClose} className='flex items-center float-right'><XMarkIcon className='min-w-7 w-7'/></div>
                         <div className='text-xl font-bold'>
                             게시글 등록
                         </div>

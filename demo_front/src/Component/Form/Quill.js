@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css';
 import DOMPurifying from '../Util/DOMPurifying'
 import axios from 'axios';
 import Spinner from '../UI/Spinner';
+import YoutubeLinkToTag from '../Util/YoutubeLinkToTag';
 
 const Quill = ({ input, currentValue }) => {
 
@@ -18,8 +19,9 @@ const Quill = ({ input, currentValue }) => {
         'Authorization': sessionStorage.getItem('token')
     }
 
+    // 입력값 처리
     const handleInput = (e) => {
-        DOMPurifying(input(e.replace(/&lt;/g, "<").replace(/&gt;/g, ">")))
+        DOMPurifying(input(YoutubeLinkToTag(e)))
     }
 
     const imageHandler = () => {

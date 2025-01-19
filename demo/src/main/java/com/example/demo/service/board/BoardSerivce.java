@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BoardSerivce {
@@ -48,9 +50,13 @@ public class BoardSerivce {
                 .build();
     }
 
-    // 게시글 마지막 번호 확인 메서드
-    public Integer findBoardLastIdx() {
+    // 게시글 마지막 번호 30개 확인 메서드
+    public List<Integer> findBoardLastIdx() {
         return br.findBoardLastIdx();
+    }
+    // 입력받은 idx부터 30개 들고오는 메서드
+    public List<Integer> findBoardLastIdx(Integer boardIdx) {
+        return br.findBoardLastIdx(boardIdx);
     }
 
     // 게시글 페이지네이션 메서드

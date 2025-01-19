@@ -8,7 +8,7 @@ const DOMPurifying = (dirty) => {
             'a', 'p', 'br', 'img', 'iframe', 'blockquote', 'div' ], // 허용할 태그
         ALLOWED_ATTR: ['href','data-list', 'src', 'alt', 'style', 'rel', 'target', 'title', 'width', 'height', 'allow', 'referrerpolicy',
              'frameborder', 'allowfullscreen', 'class', 'spellcheck'], // 허용할 속성
-        // ALLOWED_URI_REGEXP: /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/(?:embed|watch)\/.+/, // YouTube 도메인만 허용
+        ALLOWED_IFRAMES: ['youtube.com', 'youtu.be'] // youtube만 iframe 허용
     }
     return DOMPurify.sanitize(dirty, config)
 }

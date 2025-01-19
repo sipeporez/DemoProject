@@ -8,6 +8,7 @@ import CustomButton from '../UI/CustomButton';
 import { useRecoilValue } from 'recoil';
 import { LoginState } from '../../Recoil/LoginStateAtom';
 import Quill from './Quill';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const BoardEditModal = ({ boardIdx, title, data }) => {
     const [content, setContent] = useState('');
@@ -42,10 +43,8 @@ const BoardEditModal = ({ boardIdx, title, data }) => {
     }
     const handleClose = () => setOpen(false);
     const inputTitle = useRef('');
-    const inputContent = useRef('');
 
     const handleEdit = async () => {
-        console.log(content);
         if (inputTitle.current.value.trim() !== "" &&
             content.trim() !== "") {
             try {
@@ -79,7 +78,6 @@ const BoardEditModal = ({ boardIdx, title, data }) => {
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={open}
-                onClose={handleClose}
                 closeAfterTransition
                 slots={{ backdrop: Backdrop }}
                 slotProps={{
@@ -91,6 +89,7 @@ const BoardEditModal = ({ boardIdx, title, data }) => {
             >
                 <Fade in={open}>
                     <Box sx={style}>
+                        <div onClick={handleClose} className='flex items-center float-right'><XMarkIcon className='min-w-7 w-7' /></div>
                         <div className='text-xl font-bold'>
                             게시글 수정
                         </div>
@@ -107,15 +106,6 @@ const BoardEditModal = ({ boardIdx, title, data }) => {
                             <div className="relative z-0 w-full mb-3 group">
                                 <div className='w-full min-h-[50vh]'><Quill input={setContent} currentValue={data} /></div>
                             </div>
-                            {/* <div className="relative z-0 w-full mb-3 group">
-                                <textarea
-                                    ref={inputContent}
-                                    rows="10"
-                                    className="block resize-y min-h-20 max-h-[70vh] p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="글 내용"
-                                    defaultValue={content}
-                                    maxLength={5000}></textarea>
-                            </div> */}
                             <div className='float-right'>
                                 <CustomButton label={"글 수정"} onClick={handleEdit} />
                             </div>

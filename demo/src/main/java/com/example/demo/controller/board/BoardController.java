@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,10 +39,15 @@ public class BoardController {
         return ResponseEntity.ok(bs.getBoardOnce(idx));
     }
 
-    // 게시글 마지막 번호 조회 컨트롤러 (무한 스크롤용)
+    // 게시글 마지막 번호 30개 조회 컨트롤러 (무한 스크롤용)
     @GetMapping("/board/last")
     public ResponseEntity<?> findBoardLast() {
-        return  ResponseEntity.ok(bs.findBoardLastIdx());
+        return ResponseEntity.ok(bs.findBoardLastIdx());
+    }
+    // idx 부터 게시글 마지막 번호 30개 조회 컨트롤러 (무한 스크롤용)
+    @GetMapping("/board/last/{boardIdx}")
+    public ResponseEntity<?> findBoardLast(@PathVariable("boardIdx") Integer boardIdx) {
+        return ResponseEntity.ok(bs.findBoardLastIdx(boardIdx));
     }
 
     // 게시글 작성버튼 클릭시 사용자가 인증되었는지 확인하는 컨트롤러
