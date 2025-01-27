@@ -32,7 +32,7 @@ public class BoardDAO {
     @Column(length = 100, nullable = false)
     private String title;
 
-    @Column(length = 5000, nullable = false)
+    @Column(length = 30000, nullable = false)
     private String content;
 
     @CreationTimestamp

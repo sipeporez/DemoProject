@@ -8,7 +8,6 @@ import CloudFlareTurnstile from './Util/CloudFlareTurnstile';
 import Spinner from './UI/Spinner';
 import NaverLogin from './Login/NaverLogin';
 import GoogleLogin from './Login/GoogleLogin';
-import KakaoLogin from './Login/KakaoLogin';
 
 export default function Login() {
     const [userid, setUserid] = useState('');

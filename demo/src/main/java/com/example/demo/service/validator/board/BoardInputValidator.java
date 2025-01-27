@@ -10,7 +10,7 @@ import java.util.UUID;
 @Component
 public class BoardInputValidator {
     private final static int MAX_LENGTH_TITLE = 100;
-    private final static int MAX_LENGTH_CONTENT = 5000;
+    private final static int MAX_LENGTH_CONTENT = 30000;
     private final static int MAX_LENGTH_CONTENT_C = 500;
     private final static int MAX_LENGTH_CONTENT_ID = 36;
 

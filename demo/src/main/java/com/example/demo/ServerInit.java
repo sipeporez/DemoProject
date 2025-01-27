@@ -47,7 +47,7 @@ public class ServerInit implements ApplicationRunner {
                 .userid(ADMIN_ID)
                 .userpw(enc.encode(ADMIN_PASSWORD))
                 .name("어드민")
-                .nickname("I AM ADMIN")
+                .nickname("ADMIN")
                 .enabled(true)
                 .role(Role.ROLE_ADMIN)
                 .build());

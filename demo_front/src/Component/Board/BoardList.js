@@ -46,6 +46,10 @@ const BoardList = () => {
             });
         } catch (error) {
             setLoading(false);
+            if(error.code === 'ECONNABORTED') {
+                alert("서버 연결 실패");
+                return;
+            }
             alert(error.response.data);
             return;
         }
@@ -66,6 +70,10 @@ const BoardList = () => {
             });
         } catch (error) {
             setLoading(false);
+            if(error.code === 'ECONNABORTED') {
+                alert("서버 연결 실패");
+                return;
+            }
             alert(error.response.data);
             return;
         }

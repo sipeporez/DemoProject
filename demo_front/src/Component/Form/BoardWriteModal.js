@@ -62,7 +62,7 @@ const BoardWriteModal = () => {
 
     const handleWrite = async () => {
         await CheckEnabled();
-        if (inputTitle.current.value.trim() !== "" && content !== "") {
+        if (inputTitle.current.value.trim() !== "" && content !== "" && content.length < 30000) {
             // 입력된 내용을 정규식 검사하여 이미지 업로드한 경우 fileList에 이미지 이름 추가
             extractImageName(content);
             try {
