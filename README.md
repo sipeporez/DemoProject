@@ -63,6 +63,7 @@
 <details>
 <summary>API 버전 정리</summary>
 <div markdown="1">
+  
 #### 백엔드
 - **JDK**: 17.0.11
 - **Spring Boot**: 3.3.4
