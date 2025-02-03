@@ -59,3 +59,22 @@
 - **Git/GitHub**: 버전 관리
 - **Postman**: REST API 테스트
 - **Notion**: 문서화, 프로젝트 관리
+
+<details>
+<summary>API 버전 정리</summary>
+<div markdown="1">
+#### 백엔드
+- **JDK**: 17.0.11
+- **Spring Boot**: 3.3.4
+- **Scrimage**: 4.3.0
+- **Java JWT**: 4.4.0
+- **MySQL**: 8.0.39
+
+#### 프론트엔드 
+- **React**: 18.2.0
+- **Tailwind CSS**: 3.4.14
+- **Axios**: 1.7.7
+- **Recoil**: 0.7.7
+- **React Router Dom**: 6.27.0
+</div>
+</details>
