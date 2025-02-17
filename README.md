@@ -1,8 +1,8 @@
 # 데모 웹 프로젝트
-## 현재 주소 : ~~http://d2x0bexp13nzpb.cloudfront.net/~~
+## 현재 주소 : http://d2x0bexp13nzpb.cloudfront.net/
 #### 작성 일자 : 2024-11-19(화)
-#### 수정 일자 : 2025-01-20(월)
-#### 개발 일지 : https://wistful-book-17c.notion.site/72e7b6219c52477d9362fd5985cf487b
+#### 수정 일자 : 2025-02-17(월)
+#### 일자별 개발 일지 : https://wistful-book-17c.notion.site/72e7b6219c52477d9362fd5985cf487b
 
 ## 목표
 - Cloudflare Turnstile을 활용한 자동화 봇 프로그램 방지
@@ -36,7 +36,8 @@
 
 <details>
     <summary>프론트엔드</summary>
-  
+ 
+  - **Node.js**: 20.18.0
   - **React**: 18.2.0
   - **Tailwind CSS**: 3.4.14
   - **Axios**: 1.7.7
@@ -75,6 +76,7 @@
 ### 5. 웹 호스팅 및 배포
 - **AWS EC2**: 백앤드 서버(SpringBoot, MySQL, Flask) 호스팅을 위한 인스턴스
 - **AWS S3**: 빌드된 React 웹 호스팅 및 배포
+- **AWS CloudFront**: S3 버킷에 저장된 웹을 CDN 배포
 
 ### 6. AI 모델
 - **Flask**: 감성분석 모델용 REST API 서버 구축
