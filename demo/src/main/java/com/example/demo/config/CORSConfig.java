@@ -23,8 +23,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -40,8 +40,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -59,8 +59,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -76,8 +76,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -93,8 +93,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -110,8 +110,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -127,8 +127,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -144,8 +144,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -161,8 +161,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -178,8 +178,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -198,8 +198,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -215,8 +215,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -232,8 +232,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -249,8 +249,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -267,8 +267,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -286,8 +286,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );
@@ -308,8 +308,8 @@ public class CORSConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://192.168.0.123:3000",
                         "http://110.13.52.11:3000",
-                        "http://43.201.251.107:8080",
-                        "http://43.201.251.107:3000",
+                        "http://43.201.59.110:8080",
+                        "http://43.201.59.110:3000",
                         "http://demo-project-react.s3-website.ap-northeast-2.amazonaws.com",
                         "http://d2x0bexp13nzpb.cloudfront.net"
                 );

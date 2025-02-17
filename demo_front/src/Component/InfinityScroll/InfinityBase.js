@@ -37,6 +37,7 @@ const InfinityBase = () => {
             // 현재 페이지가 1인 경우 fetch 멈춤
             if (page && page === 1) {
                 setHasNextPage(false);
+                return;
             }
             // shift로 배열에 저장된 글 번호 가져오기 (앞 순서부터 제거)
             if (entry.isIntersecting && !loading && hasNextPage && pageList.length !== 0) {

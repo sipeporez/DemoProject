@@ -54,6 +54,7 @@ public class BoardSerivce {
     public List<Integer> findBoardLastIdx() {
         return br.findBoardLastIdx();
     }
+
     // 입력받은 idx부터 30개 들고오는 메서드
     public List<Integer> findBoardLastIdx(Integer boardIdx) {
         return br.findBoardLastIdx(boardIdx);
@@ -70,8 +71,10 @@ public class BoardSerivce {
     }
 
     // 유저 Enabled 확인
-    public boolean checkUserEnabled() { return memVal.findMemberIDFromToken() != null; }
-    
+    public boolean checkUserEnabled() {
+        return memVal.findMemberIDFromToken() != null;
+    }
+
     // 게시글 쓰기 메서드
     public Integer writeBoard(WriteBoardDTO dto) {
         // 입력값 검증
