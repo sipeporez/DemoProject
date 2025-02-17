@@ -1,5 +1,6 @@
 # 데모 웹 프로젝트
 ## 현재 주소 : http://d2x0bexp13nzpb.cloudfront.net/
+ - 현재 https 미적용으로 인해 https로 접속할 경우 CORS(Mixed Content) 오류로 인해 올바르게 동작하지 않습니다.
 #### 작성 일자 : 2024-11-19(화)
 #### 수정 일자 : 2025-02-17(월)
 #### 일자별 개발 일지 : https://wistful-book-17c.notion.site/72e7b6219c52477d9362fd5985cf487b
