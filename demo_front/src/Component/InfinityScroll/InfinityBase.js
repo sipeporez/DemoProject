@@ -25,8 +25,10 @@ const InfinityBase = () => {
 
     // 페이지 리스트 끝날 시 게시글 번호 리스트 이어서 가져오기
     useEffect(() => {
-        if (page && pageList && pageList.length < 1) {
-            findBoardLastIdxContinue(page);
+        if (page !== 1) {
+            if (page && pageList && pageList.length < 1) {
+                findBoardLastIdxContinue(page);
+            }
         }
     }, [page, pageList])
 
